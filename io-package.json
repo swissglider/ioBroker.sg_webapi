@@ -1,0 +1,72 @@
+{
+    "common": {
+        "name": "sg_webapi",
+        "version": "0.0.1",
+        "news": {
+            "0.0.1": {
+                "en": "initial release",
+                "de": "Erstveröffentlichung",
+                "ru": "Начальная версия",
+                "pt": "lançamento inicial",
+                "nl": "Eerste uitgave",
+                "fr": "Première version",
+                "it": "Versione iniziale",
+                "es": "Versión inicial",
+                "pl": "Pierwsze wydanie",
+                "zh-cn": "首次出版"
+            }
+        },
+        "title": "Swissglider Web API",
+        "titleLang": {
+            "en": "Swissglider Web API",
+            "de": "Swissglider-Web-API",
+            "ru": "Веб-API Swissglider",
+            "pt": "API da Web Swissglider",
+            "nl": "Swissglider Web-API",
+            "fr": "API Web Swissglider",
+            "it": "API Web di Swissglider",
+            "es": "API web de Swissglider",
+            "pl": "Swissglider Web API",
+            "zh-cn": "瑞士滑翔机网络 API"
+        },
+        "desc": {
+            "en": "NestJS Adapter for Rest API access to function not covered by the standard simple Api like sendTo",
+            "de": "NestJS-Adapter für Rest-API-Zugriff auf Funktionen, die nicht von der einfachen Standard-API wie sendTo abgedeckt werden",
+            "ru": "Доступ NestJS Adapter for Rest API к функции, не охватываемой стандартным простым API, например sendTo",
+            "pt": "Adaptador NestJS para acesso à API Rest para função não coberta pela API simples padrão como sendTo",
+            "nl": "NestJS Adapter for Rest API-toegang tot functie die niet wordt gedekt door de standaard eenvoudige API zoals sendTo",
+            "fr": "Adaptateur NestJS pour l'accès à l'API Rest à une fonction non couverte par l'API simple standard comme sendTo",
+            "it": "Adattatore NestJS per l'accesso dell'API Rest a funzioni non coperte dalla semplice API standard come sendTo",
+            "es": "Adaptador NestJS para el acceso de la API Rest a la función no cubierta por la API simple estándar como sendTo",
+            "pl": "Adapter NestJS do dostępu do interfejsu API Rest do funkcji nieobjętych standardowym prostym interfejsem API, takim jak sendTo",
+            "zh-cn": "NestJS 适配器，用于 Rest API 访问标准简单 Api（如 sendTo）未涵盖的功能"
+        },
+        "authors": ["Swissglider <npm@mailschweiz.com>"],
+        "keywords": ["NestJS", "Swissglider", "Web", "API", "REST"],
+        "license": "MIT",
+        "platform": "Javascript/Node.js",
+        "main": "build/main.js",
+        "icon": "sg_webapi.png",
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/swissglider/ioBroker.sg_webapi/main/admin/sg_webapi.png",
+        "readme": "https://github.com/swissglider/ioBroker.sg_webapi/blob/main/README.md",
+        "loglevel": "info",
+        "mode": "daemon",
+        "type": "communication",
+        "compact": true,
+        "connectionType": "local",
+        "dataSource": "push",
+        "materialize": true,
+        "dependencies": [
+            {
+                "js-controller": ">=2.0.0"
+            }
+        ]
+    },
+    "native": {
+        "option1": true,
+        "option2": "42"
+    },
+    "objects": [],
+    "instanceObjects": []
+}
