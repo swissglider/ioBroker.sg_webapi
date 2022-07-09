@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../src/nestjs/iobroker/result.interface.ts"],
+  "sourcesContent": ["export interface Result {\n    result?: any | undefined;\n    error?: string | Error | unknown;\n}\n"],
+  "mappings": ";;;;;;;;;;;;;;AAAA;AAAA;",
+  "names": []
+}

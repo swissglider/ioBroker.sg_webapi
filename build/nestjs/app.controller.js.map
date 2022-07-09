@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/nestjs/app.controller.ts"],
+  "sourcesContent": ["import { Controller, Get, Res } from '@nestjs/common';\n\n@Controller()\nexport class AppController {\n    @Get()\n    redirect(@Res() res: any) {\n        return res.redirect('/help');\n    }\n}\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA,oBAAqC;AAG9B,IAAM,gBAAN,MAAoB;AAAA,EAEvB,SAAgB,KAAU;AACtB,WAAO,IAAI,SAAS,OAAO;AAAA,EAC/B;AACJ;AAHI;AAAA,EADA,AAAC,uBAAI;AAAA,EACI,mBAAC,uBAAI;AAAA,GAAd,AAFS,cAET;AAFS,gBAAN;AAAA,EADP,AAAC,8BAAW;AAAA,GACC;",
+  "names": []
+}

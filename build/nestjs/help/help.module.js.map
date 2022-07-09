@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../src/nestjs/help/help.module.ts"],
+  "sourcesContent": ["import { Module } from '@nestjs/common';\nimport { HelpController } from './help.controller';\nimport { HelpService } from './help.service';\n\n@Module({\n    controllers: [HelpController],\n    providers: [HelpService],\n})\nexport class HelpModule {}\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA,oBAAuB;AACvB,kBAA+B;AAC/B,mBAA4B;AAMrB,IAAM,aAAN,MAAiB;AAAC;AAAZ,aAAN;AAAA,EAJP,AAAC,0BAAO;AAAA,IACJ,aAAa,CAAC,0BAAc;AAAA,IAC5B,WAAW,CAAC,wBAAW;AAAA,EAC3B,CAAC;AAAA,GACY;",
+  "names": []
+}

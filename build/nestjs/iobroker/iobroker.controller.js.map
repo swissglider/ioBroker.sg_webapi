@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../src/nestjs/iobroker/iobroker.controller.ts"],
+  "sourcesContent": ["import { Controller, Get } from '@nestjs/common';\nimport { AllInstanceService } from './all-instances.service';\nimport { Result } from './result.interface';\n\n@Controller('iobroker')\nexport class IobrokerController {\n    constructor(private allInstanceServise: AllInstanceService) {\n        this.allInstanceServise = new AllInstanceService();\n    }\n\n    @Get('allInstanceNames')\n    async getAllInstanceNames(): Promise<Result> {\n        console.log('==== Start getAllInstanceNames 1 ====');\n        return this.allInstanceServise.getAllInstanceNames();\n    }\n}\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA,oBAAgC;AAChC,2BAAmC;AAI5B,IAAM,qBAAN,MAAyB;AAAA,EAC5B,YAAoB,oBAAwC;AAAxC;AAChB,SAAK,qBAAqB,IAAI,wCAAmB;AAAA,EACrD;AAAA,EAGA,MAAM,sBAAuC;AACzC,YAAQ,IAAI,uCAAuC;AACnD,WAAO,KAAK,mBAAmB,oBAAoB;AAAA,EACvD;AACJ;AAJU;AAAA,EADN,AAAC,uBAAI,kBAAkB;AAAA,GACjB,AANG,mBAMH;AANG,qBAAN;AAAA,EADP,AAAC,8BAAW,UAAU;AAAA,GACT;",
+  "names": []
+}

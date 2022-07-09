@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../src/nestjs/iobroker/iobroker.module.ts"],
+  "sourcesContent": ["import { Module } from '@nestjs/common';\nimport { AllInstanceService } from './all-instances.service';\nimport { IobrokerController } from './iobroker.controller';\n\n@Module({\n    controllers: [IobrokerController],\n    providers: [AllInstanceService],\n})\nexport class IobrokerModule {}\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA,oBAAuB;AACvB,2BAAmC;AACnC,sBAAmC;AAM5B,IAAM,iBAAN,MAAqB;AAAC;AAAhB,iBAAN;AAAA,EAJP,AAAC,0BAAO;AAAA,IACJ,aAAa,CAAC,kCAAkB;AAAA,IAChC,WAAW,CAAC,uCAAkB;AAAA,EAClC,CAAC;AAAA,GACY;",
+  "names": []
+}

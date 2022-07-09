@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/nestjs/main.ts"],
+  "sourcesContent": ["import { NestFactory } from '@nestjs/core';\nimport { AppModule } from './app.module';\n\ntype T_AdapterStr = {\n    adapter: ioBroker.Adapter | undefined;\n};\nexport const AdapterStr: T_AdapterStr = {\n    adapter: undefined,\n};\n\nasync function bootstrap(adapter: ioBroker.Adapter) {\n    AdapterStr.adapter = adapter;\n    const app = await NestFactory.create(AppModule);\n    await app.listen(8089);\n}\n\nexport default bootstrap;\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA,kBAA4B;AAC5B,iBAA0B;AAKnB,MAAM,aAA2B;AAAA,EACpC,SAAS;AACb;AAEA,yBAAyB,SAA2B;AAChD,aAAW,UAAU;AACrB,QAAM,MAAM,MAAM,wBAAY,OAAO,oBAAS;AAC9C,QAAM,IAAI,OAAO,IAAI;AACzB;AAEA,IAAO,eAAQ;",
+  "names": []
+}

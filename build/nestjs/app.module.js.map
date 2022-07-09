@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/nestjs/app.module.ts"],
+  "sourcesContent": ["import { Module } from '@nestjs/common';\nimport { AppController } from './app.controller';\nimport { HelpModule } from './help/help.module';\nimport { IobrokerModule } from './iobroker/iobroker.module';\n\n@Module({\n    imports: [HelpModule, IobrokerModule],\n    controllers: [AppController],\n})\nexport class AppModule {}\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA,oBAAuB;AACvB,iBAA8B;AAC9B,kBAA2B;AAC3B,sBAA+B;AAMxB,IAAM,YAAN,MAAgB;AAAC;AAAX,YAAN;AAAA,EAJP,AAAC,0BAAO;AAAA,IACJ,SAAS,CAAC,wBAAY,8BAAc;AAAA,IACpC,aAAa,CAAC,wBAAa;AAAA,EAC/B,CAAC;AAAA,GACY;",
+  "names": []
+}

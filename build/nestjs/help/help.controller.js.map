@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../src/nestjs/help/help.controller.ts"],
+  "sourcesContent": ["import { Controller, Get } from '@nestjs/common';\nimport { Command } from './command.interface';\nimport { HelpService } from './help.service';\n\n@Controller('help')\nexport class HelpController {\n    constructor(private helpService: HelpService) {\n        this.helpService = new HelpService();\n    }\n\n    @Get()\n    async getRootCommands(): Promise<Command[]> {\n        console.log('==== Start getRootCommands ====');\n        console.log(this.helpService);\n        return this.helpService.getRootCommands();\n    }\n\n    @Get('test')\n    async getTest(): Promise<any> {\n        console.log('==== Start getTest ====');\n        return this.helpService.getTest();\n    }\n}\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA,oBAAgC;AAEhC,kBAA4B;AAGrB,IAAM,iBAAN,MAAqB;AAAA,EACxB,YAAoB,aAA0B;AAA1B;AAChB,SAAK,cAAc,IAAI,wBAAY;AAAA,EACvC;AAAA,EAGA,MAAM,kBAAsC;AACxC,YAAQ,IAAI,iCAAiC;AAC7C,YAAQ,IAAI,KAAK,WAAW;AAC5B,WAAO,KAAK,YAAY,gBAAgB;AAAA,EAC5C;AAAA,EAGA,MAAM,UAAwB;AAC1B,YAAQ,IAAI,yBAAyB;AACrC,WAAO,KAAK,YAAY,QAAQ;AAAA,EACpC;AACJ;AAXU;AAAA,EADN,AAAC,uBAAI;AAAA,GACC,AANG,eAMH;AAOA;AAAA,EADN,AAAC,uBAAI,MAAM;AAAA,GACL,AAbG,eAaH;AAbG,iBAAN;AAAA,EADP,AAAC,8BAAW,MAAM;AAAA,GACL;",
+  "names": []
+}
