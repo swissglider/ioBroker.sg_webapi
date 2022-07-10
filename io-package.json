@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "sg_webapi",
-        "version": "0.0.2",
+        "version": "1.0.0",
         "news": {
+            "1.0.0": {
+                "en": "Version 1",
+                "de": "Artikel 1",
+                "ru": "Версия 1",
+                "pt": "Versão 1",
+                "nl": "Versie 1",
+                "fr": "Version 1",
+                "it": "Versione 1",
+                "es": "Versión 1",
+                "pl": "Wersja 1",
+                "zh-cn": "目 录1"
+            },
             "0.0.1": {
                 "en": "initial release",
                 "de": "Erstveröffentlichung",
@@ -41,8 +53,16 @@
             "pl": "Adapter NestJS do dostępu do interfejsu API Rest do funkcji nieobjętych standardowym prostym interfejsem API, takim jak sendTo",
             "zh-cn": "NestJS 适配器，用于 Rest API 访问标准简单 Api（如 sendTo）未涵盖的功能"
         },
-        "authors": ["Swissglider <npm@mailschweiz.com>"],
-        "keywords": ["NestJS", "Swissglider", "Web", "API", "REST"],
+        "authors": [
+            "Swissglider <npm@mailschweiz.com>"
+        ],
+        "keywords": [
+            "NestJS",
+            "Swissglider",
+            "Web",
+            "API",
+            "REST"
+        ],
         "license": "MIT",
         "platform": "Javascript/Node.js",
         "main": "build/main.js",
