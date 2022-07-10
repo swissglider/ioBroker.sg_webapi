@@ -19,6 +19,7 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 var main_exports = {};
 __export(main_exports, {
   AdapterStr: () => AdapterStr,
+  DEFAULT_TIMEOUT: () => DEFAULT_TIMEOUT,
   default: () => main_default
 });
 module.exports = __toCommonJS(main_exports);
@@ -27,6 +28,7 @@ var import_app = require("./app.module");
 const AdapterStr = {
   adapter: void 0
 };
+const DEFAULT_TIMEOUT = 5e3;
 async function bootstrap(adapter) {
   AdapterStr.adapter = adapter;
   const app = await import_core.NestFactory.create(import_app.AppModule);
@@ -35,6 +37,7 @@ async function bootstrap(adapter) {
 var main_default = bootstrap;
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
-  AdapterStr
+  AdapterStr,
+  DEFAULT_TIMEOUT
 });
 //# sourceMappingURL=main.js.map

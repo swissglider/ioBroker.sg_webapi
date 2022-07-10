@@ -8,7 +8,9 @@ export const AdapterStr: T_AdapterStr = {
     adapter: undefined,
 };
 
-async function bootstrap(adapter: ioBroker.Adapter) {
+export const DEFAULT_TIMEOUT = 5000;
+
+async function bootstrap(adapter: ioBroker.Adapter): Promise<any> {
     AdapterStr.adapter = adapter;
     const app = await NestFactory.create(AppModule);
     await app.listen(8089);

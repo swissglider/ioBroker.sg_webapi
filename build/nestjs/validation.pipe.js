@@ -25,45 +25,36 @@ var __decorateClass = (decorators, target, key, kind) => {
     __defProp(target, key, result);
   return result;
 };
-var __decorateParam = (index, decorator) => (target, key) => decorator(target, key, index);
-var app_controller_exports = {};
-__export(app_controller_exports, {
-  AppController: () => AppController,
-  TestDTO: () => TestDTO
+var validation_pipe_exports = {};
+__export(validation_pipe_exports, {
+  ValidationPipe: () => ValidationPipe
 });
-module.exports = __toCommonJS(app_controller_exports);
+module.exports = __toCommonJS(validation_pipe_exports);
 var import_common = require("@nestjs/common");
+var import_class_transformer = require("class-transformer");
 var import_class_validator = require("class-validator");
-var import_validation = require("./validation.pipe");
-class TestDTO {
-}
-__decorateClass([
-  (0, import_class_validator.IsNotEmpty)(),
-  (0, import_class_validator.IsString)()
-], TestDTO.prototype, "test", 2);
-let AppController = class {
-  redirect(res) {
-    return res.redirect("/help");
+let ValidationPipe = class {
+  constructor(params) {
+    this.params = params;
   }
-  async test(test) {
-    return { hallo: `Velo-_: ${test.test}` };
+  async transform(value, metadata) {
+    if (!this.params && !this.params.meta && !metadata.metatype) {
+      throw new import_common.BadRequestException("unknown error");
+    }
+    const object = (0, import_class_transformer.plainToInstance)(this.params.meta, value);
+    const errors = await (0, import_class_validator.validate)(object, { whitelist: true, forbidNonWhitelisted: true });
+    if (errors.length > 0) {
+      console.log(errors);
+      throw new import_common.BadRequestException(Object.values(errors[0].constraints));
+    }
+    return value;
   }
 };
-__decorateClass([
-  (0, import_common.Get)(),
-  __decorateParam(0, (0, import_common.Res)())
-], AppController.prototype, "redirect", 1);
-__decorateClass([
-  (0, import_common.Post)("test"),
-  (0, import_common.UsePipes)(new import_validation.ValidationPipe({ meta: TestDTO })),
-  __decorateParam(0, (0, import_common.Body)())
-], AppController.prototype, "test", 1);
-AppController = __decorateClass([
-  (0, import_common.Controller)()
-], AppController);
+ValidationPipe = __decorateClass([
+  (0, import_common.Injectable)()
+], ValidationPipe);
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
-  AppController,
-  TestDTO
+  ValidationPipe
 });
-//# sourceMappingURL=app.controller.js.map
+//# sourceMappingURL=validation.pipe.js.map

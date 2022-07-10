@@ -25,45 +25,50 @@ var __decorateClass = (decorators, target, key, kind) => {
     __defProp(target, key, result);
   return result;
 };
-var __decorateParam = (index, decorator) => (target, key) => decorator(target, key, index);
-var app_controller_exports = {};
-__export(app_controller_exports, {
-  AppController: () => AppController,
-  TestDTO: () => TestDTO
+var send_to_service_exports = {};
+__export(send_to_service_exports, {
+  SendToService: () => SendToService,
+  SendTo_DTO: () => SendTo_DTO
 });
-module.exports = __toCommonJS(app_controller_exports);
+module.exports = __toCommonJS(send_to_service_exports);
 var import_common = require("@nestjs/common");
 var import_class_validator = require("class-validator");
-var import_validation = require("./validation.pipe");
-class TestDTO {
+var import_main = require("../../main");
+class SendTo_DTO {
 }
 __decorateClass([
   (0, import_class_validator.IsNotEmpty)(),
   (0, import_class_validator.IsString)()
-], TestDTO.prototype, "test", 2);
-let AppController = class {
-  redirect(res) {
-    return res.redirect("/help");
-  }
-  async test(test) {
-    return { hallo: `Velo-_: ${test.test}` };
+], SendTo_DTO.prototype, "instance", 2);
+__decorateClass([
+  (0, import_class_validator.IsNotEmpty)(),
+  (0, import_class_validator.IsString)()
+], SendTo_DTO.prototype, "command", 2);
+__decorateClass([
+  (0, import_class_validator.IsOptional)(),
+  (0, import_class_validator.IsObject)()
+], SendTo_DTO.prototype, "message", 2);
+__decorateClass([
+  (0, import_class_validator.IsOptional)(),
+  (0, import_class_validator.IsNumber)()
+], SendTo_DTO.prototype, "timeout", 2);
+let SendToService = class {
+  async sendTo({ instance, command, message, timeout = import_main.DEFAULT_TIMEOUT }) {
+    var _a;
+    const sendToResultPromise = (_a = import_main.AdapterStr.adapter) == null ? void 0 : _a.sendToAsync(instance, command, message);
+    const timoutPromise = new Promise((resolve) => {
+      setTimeout(resolve, timeout, { error: `TimeoutError on ${instance} : ${command} after ${timeout}ms` });
+    });
+    const result = await Promise.race([sendToResultPromise, timoutPromise]);
+    return { result };
   }
 };
-__decorateClass([
-  (0, import_common.Get)(),
-  __decorateParam(0, (0, import_common.Res)())
-], AppController.prototype, "redirect", 1);
-__decorateClass([
-  (0, import_common.Post)("test"),
-  (0, import_common.UsePipes)(new import_validation.ValidationPipe({ meta: TestDTO })),
-  __decorateParam(0, (0, import_common.Body)())
-], AppController.prototype, "test", 1);
-AppController = __decorateClass([
-  (0, import_common.Controller)()
-], AppController);
+SendToService = __decorateClass([
+  (0, import_common.Injectable)()
+], SendToService);
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
-  AppController,
-  TestDTO
+  SendToService,
+  SendTo_DTO
 });
-//# sourceMappingURL=app.controller.js.map
+//# sourceMappingURL=send-to.service.js.map

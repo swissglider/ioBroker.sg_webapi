@@ -36,7 +36,11 @@ let HelpService = class {
   constructor() {
     this.rootCommands = [
       { name: "h", description: "velo" },
-      { name: "iobroker/allInstanceNames", description: "returns all Instance name like admin.0" }
+      { name: "iobroker/allInstanceNames", description: "returns all Instance name like admin.0" },
+      {
+        name: "iobroker/searchAllTypesWithNamePatternIncludes",
+        description: "return all object from input value type including string from value pattern"
+      }
     ];
   }
   getRootCommands() {

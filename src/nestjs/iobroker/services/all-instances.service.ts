@@ -1,10 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { AdapterStr } from '../main';
-import { Result } from './result.interface';
+import { IsNumber, IsOptional } from 'class-validator';
+import { AdapterStr, DEFAULT_TIMEOUT } from '../../main';
+import { Result } from '../interfaces/result.interface';
 
-const getAllInstances = async (): Promise<any> => {
+export class GetAllInstanceNames_DTO {
+    @IsOptional()
+    @IsNumber()
+    timeout!: number | undefined;
+}
+
+const getAllInstances = async (timeout: number): Promise<any> => {
     const testResultPromise = AdapterStr.adapter?.getForeignObjectsAsync('*', 'instance');
-    const timeout = 1000;
     const timoutPromise = new Promise((resolve) => {
         setTimeout(resolve, timeout, { error: `TimeoutError on AllInstanceService after ${timeout}ms` });
     });
@@ -14,8 +20,8 @@ const getAllInstances = async (): Promise<any> => {
 
 @Injectable()
 export class AllInstanceService {
-    async getAllInstanceNames(): Promise<Result> {
-        const result = await getAllInstances();
+    async getAllInstanceNames({ timeout = DEFAULT_TIMEOUT }: GetAllInstanceNames_DTO): Promise<Result> {
+        const result = await getAllInstances(timeout);
         if (result && typeof result === 'object' && result.hasOwnProperty('system.adapter.admin.0')) {
             return { result: Object.keys(result).map((e) => e.substring(15)) };
         }

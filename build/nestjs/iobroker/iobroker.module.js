@@ -31,14 +31,16 @@ __export(iobroker_module_exports, {
 });
 module.exports = __toCommonJS(iobroker_module_exports);
 var import_common = require("@nestjs/common");
-var import_all_instances = require("./all-instances.service");
 var import_iobroker = require("./iobroker.controller");
+var import_all_instances = require("./services/all-instances.service");
+var import_search_object = require("./services/search-object.service");
+var import_send_to = require("./services/send-to.service");
 let IobrokerModule = class {
 };
 IobrokerModule = __decorateClass([
   (0, import_common.Module)({
     controllers: [import_iobroker.IobrokerController],
-    providers: [import_all_instances.AllInstanceService]
+    providers: [import_all_instances.AllInstanceService, import_search_object.SearchObjectService, import_send_to.SendToService]
   })
 ], IobrokerModule);
 // Annotate the CommonJS export names for ESM import in node:

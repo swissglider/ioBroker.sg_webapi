@@ -27,15 +27,22 @@ var __decorateClass = (decorators, target, key, kind) => {
 };
 var all_instances_service_exports = {};
 __export(all_instances_service_exports, {
-  AllInstanceService: () => AllInstanceService
+  AllInstanceService: () => AllInstanceService,
+  GetAllInstanceNames_DTO: () => GetAllInstanceNames_DTO
 });
 module.exports = __toCommonJS(all_instances_service_exports);
 var import_common = require("@nestjs/common");
-var import_main = require("../main");
-const getAllInstances = async () => {
+var import_class_validator = require("class-validator");
+var import_main = require("../../main");
+class GetAllInstanceNames_DTO {
+}
+__decorateClass([
+  (0, import_class_validator.IsOptional)(),
+  (0, import_class_validator.IsNumber)()
+], GetAllInstanceNames_DTO.prototype, "timeout", 2);
+const getAllInstances = async (timeout) => {
   var _a;
   const testResultPromise = (_a = import_main.AdapterStr.adapter) == null ? void 0 : _a.getForeignObjectsAsync("*", "instance");
-  const timeout = 1e3;
   const timoutPromise = new Promise((resolve) => {
     setTimeout(resolve, timeout, { error: `TimeoutError on AllInstanceService after ${timeout}ms` });
   });
@@ -43,8 +50,8 @@ const getAllInstances = async () => {
   return result;
 };
 let AllInstanceService = class {
-  async getAllInstanceNames() {
-    const result = await getAllInstances();
+  async getAllInstanceNames({ timeout = import_main.DEFAULT_TIMEOUT }) {
+    const result = await getAllInstances(timeout);
     if (result && typeof result === "object" && result.hasOwnProperty("system.adapter.admin.0")) {
       return { result: Object.keys(result).map((e) => e.substring(15)) };
     }
@@ -56,6 +63,7 @@ AllInstanceService = __decorateClass([
 ], AllInstanceService);
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
-  AllInstanceService
+  AllInstanceService,
+  GetAllInstanceNames_DTO
 });
 //# sourceMappingURL=all-instances.service.js.map

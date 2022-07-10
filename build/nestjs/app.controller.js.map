@@ -1,7 +1,7 @@
 {
   "version": 3,
   "sources": ["../../src/nestjs/app.controller.ts"],
-  "sourcesContent": ["import { Controller, Get, Res } from '@nestjs/common';\n\n@Controller()\nexport class AppController {\n    @Get()\n    redirect(@Res() res: any) {\n        return res.redirect('/help');\n    }\n}\n"],
-  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA,oBAAqC;AAG9B,IAAM,gBAAN,MAAoB;AAAA,EAEvB,SAAgB,KAAU;AACtB,WAAO,IAAI,SAAS,OAAO;AAAA,EAC/B;AACJ;AAHI;AAAA,EADA,AAAC,uBAAI;AAAA,EACI,mBAAC,uBAAI;AAAA,GAAd,AAFS,cAET;AAFS,gBAAN;AAAA,EADP,AAAC,8BAAW;AAAA,GACC;",
+  "sourcesContent": ["import { Body, Controller, Get, Post, Res, UsePipes } from '@nestjs/common';\nimport { IsNotEmpty, IsString } from 'class-validator';\nimport { ValidationPipe } from './validation.pipe';\n\nexport class TestDTO {\n    @IsNotEmpty()\n    @IsString()\n    public test!: string;\n}\n\n@Controller()\nexport class AppController {\n    @Get()\n    redirect(@Res() res: any) {\n        return res.redirect('/help');\n    }\n    @Post('test')\n    @UsePipes(new ValidationPipe({ meta: TestDTO }))\n    public async test(@Body() test: TestDTO): Promise<any> {\n        return { hallo: `Velo-_: ${test.test}` };\n    }\n}\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA,oBAA2D;AAC3D,6BAAqC;AACrC,wBAA+B;AAExB,MAAM,QAAQ;AAIrB;AADW;AAAA,EAFP,AAAC,uCAAW;AAAA,EACZ,AAAC,qCAAS;AAAA,GACH,AAHE,QAGF;AAIJ,IAAM,gBAAN,MAAoB;AAAA,EAEvB,SAAgB,KAAU;AACtB,WAAO,IAAI,SAAS,OAAO;AAAA,EAC/B;AAAA,EAGA,MAAa,KAAa,MAA6B;AACnD,WAAO,EAAE,OAAO,WAAW,KAAK,OAAO;AAAA,EAC3C;AACJ;AARI;AAAA,EADA,AAAC,uBAAI;AAAA,EACI,mBAAC,uBAAI;AAAA,GAAd,AAFS,cAET;AAKa;AAAA,EAFb,AAAC,wBAAK,MAAM;AAAA,EACZ,AAAC,4BAAS,IAAI,iCAAe,EAAE,MAAM,QAAQ,CAAC,CAAC;AAAA,EAC7B,mBAAC,wBAAK;AAAA,GAAX,AAPJ,cAOI;AAPJ,gBAAN;AAAA,EADP,AAAC,8BAAW;AAAA,GACC;",
   "names": []
 }

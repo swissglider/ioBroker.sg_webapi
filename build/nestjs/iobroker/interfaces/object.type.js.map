@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../../src/nestjs/iobroker/interfaces/object.type.ts"],
+  "sourcesContent": ["export type ObjectType =\n    | 'state'\n    | 'channel'\n    | 'device'\n    | 'folder'\n    | 'enum'\n    | 'adapter'\n    | 'config'\n    | 'group'\n    | 'host'\n    | 'instance'\n    | 'meta'\n    | 'script'\n    | 'user'\n    | 'chart';\n"],
+  "mappings": ";;;;;;;;;;;;;;AAAA;AAAA;",
+  "names": []
+}

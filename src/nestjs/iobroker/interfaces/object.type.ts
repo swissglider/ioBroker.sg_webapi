@@ -1,0 +1,15 @@
+export type ObjectType =
+    | 'state'
+    | 'channel'
+    | 'device'
+    | 'folder'
+    | 'enum'
+    | 'adapter'
+    | 'config'
+    | 'group'
+    | 'host'
+    | 'instance'
+    | 'meta'
+    | 'script'
+    | 'user'
+    | 'chart';
