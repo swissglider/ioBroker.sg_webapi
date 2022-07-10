@@ -123,6 +123,10 @@ For later updates, the above procedure is not necessary. Just do the following:
 
 -   (Swissglider) Version 1
 
+### 0.0.3 (2022-07-10)
+
+-   (Swissglider) Version 1
+
 ## License
 
 MIT License
