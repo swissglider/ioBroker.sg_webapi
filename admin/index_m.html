@@ -1,95 +1,196 @@
 <html>
+    <head>
+        <!-- Load ioBroker scripts and styles-->
+        <link rel="stylesheet" type="text/css" href="../../css/adapter.css" />
+        <link rel="stylesheet" type="text/css" href="../../lib/css/materialize.css" />
 
-<head>
+        <script type="text/javascript" src="../../lib/js/jquery-3.2.1.min.js"></script>
+        <script type="text/javascript" src="../../socket.io/socket.io.js"></script>
 
-    <!-- Load ioBroker scripts and styles-->
-    <link rel="stylesheet" type="text/css" href="../../css/adapter.css" />
-    <link rel="stylesheet" type="text/css" href="../../lib/css/materialize.css">
+        <script type="text/javascript" src="../../js/translate.js"></script>
+        <script type="text/javascript" src="../../lib/js/materialize.js"></script>
+        <script type="text/javascript" src="../../js/adapter-settings.js"></script>
 
-    <script type="text/javascript" src="../../lib/js/jquery-3.2.1.min.js"></script>
-    <script type="text/javascript" src="../../socket.io/socket.io.js"></script>
+        <!-- Load our own files -->
+        <link rel="stylesheet" type="text/css" href="style.css" />
+        <script type="text/javascript" src="words.js"></script>
 
-    <script type="text/javascript" src="../../js/translate.js"></script>
-    <script type="text/javascript" src="../../lib/js/materialize.js"></script>
-    <script type="text/javascript" src="../../js/adapter-settings.js"></script>
+        <script type="text/javascript">
+            // This will be called by the admin adapter when the settings page loads
+            function load(settings, onChange) {
+                // example: select elements with id=key and class=value and insert value
+                if (!settings) return;
+                $('.value').each(function () {
+                    var $key = $(this);
+                    var id = $key.attr('id');
+                    if ($key.attr('type') === 'checkbox') {
+                        if (id === 'MIIO_activatedConfig1' && settings[id]) {
+                            $('#miHomeConfig1').show();
+                        }
+                        if (id === 'MIIO_activatedConfig1' && !settings[id]) {
+                            $('#miHomeConfig1').hide();
+                        }
+                        if (id === 'MIIO_activatedConfig2' && settings[id]) {
+                            $('#miHomeConfig2').show();
+                        }
+                        if (id === 'MIIO_activatedConfig2' && !settings[id]) {
+                            $('#miHomeConfig2').hide();
+                        }
+                        // do not call onChange direct, because onChange could expect some arguments
+                        $key.prop('checked', settings[id]).on('change', () => {
+                            if (id === 'MIIO_activatedConfig1' && $key.is(':checked')) {
+                                $('#miHomeConfig1').show();
+                            }
+                            if (id === 'MIIO_activatedConfig1' && !$key.is(':checked')) {
+                                $('#miHomeConfig1').hide();
+                            }
+                            if (id === 'MIIO_activatedConfig2' && $key.is(':checked')) {
+                                $('#miHomeConfig2').show();
+                            }
+                            if (id === 'MIIO_activatedConfig2' && !$key.is(':checked')) {
+                                $('#miHomeConfig2').hide();
+                            }
+                            return onChange();
+                        });
+                    } else {
+                        // do not call onChange direct, because onChange could expect some arguments
+                        $key.val(settings[id])
+                            .on('change', () => onChange())
+                            .on('keyup', () => onChange());
+                    }
+                });
+                onChange(false);
+                // reinitialize all the Materialize labels on the page if you are dynamically adding inputs:
+                if (M) M.updateTextFields();
+            }
 
-    <!-- Load our own files -->
-    <link rel="stylesheet" type="text/css" href="style.css" />
-    <script type="text/javascript" src="words.js"></script>
+            // This will be called by the admin adapter when the user presses the save button
+            function save(callback) {
+                // example: select elements with class=value and build settings object
+                var obj = {};
+                $('.value').each(function () {
+                    var $this = $(this);
+                    if ($this.attr('type') === 'checkbox') {
+                        obj[$this.attr('id')] = $this.prop('checked');
+                    } else if ($this.attr('type') === 'number') {
+                        obj[$this.attr('id')] = parseFloat($this.val());
+                    } else {
+                        obj[$this.attr('id')] = $this.val();
+                    }
+                });
+                callback(obj);
+            }
+        </script>
+    </head>
 
-    <script type="text/javascript">
-        // This will be called by the admin adapter when the settings page loads
-        function load(settings, onChange) {
-            // example: select elements with id=key and class=value and insert value
-            if (!settings) return;
-            $('.value').each(function () {
-                var $key = $(this);
-                var id = $key.attr('id');
-                if ($key.attr('type') === 'checkbox') {
-                    // do not call onChange direct, because onChange could expect some arguments
-                    $key.prop('checked', settings[id])
-                        .on('change', () => onChange())
-                        ;
-                } else {
-                    // do not call onChange direct, because onChange could expect some arguments
-                    $key.val(settings[id])
-                        .on('change', () => onChange())
-                        .on('keyup', () => onChange())
-                        ;
-                }
-            });
-            onChange(false);
-            // reinitialize all the Materialize labels on the page if you are dynamically adding inputs:
-            if (M) M.updateTextFields();
-        }
-
-        // This will be called by the admin adapter when the user presses the save button
-        function save(callback) {
-            // example: select elements with class=value and build settings object
-            var obj = {};
-            $('.value').each(function () {
-                var $this = $(this);
-                if ($this.attr('type') === 'checkbox') {
-                    obj[$this.attr('id')] = $this.prop('checked');
-                } else if ($this.attr('type') === 'number') {
-                    obj[$this.attr('id')] = parseFloat($this.val());
-                } else {
-                    obj[$this.attr('id')] = $this.val();
-                }
-            });
-            callback(obj);
-        }
-    </script>
-
-</head>
-
-<body>
-
-    <div class="m adapter-container">
-
-        <div class="row">
-            <div class="col s12 m4 l2">
-                <img src="sg_webapi.png" class="logo">
+    <body>
+        <div class="adapter-container m">
+            <div class="row">
+                <div class="col s12">
+                    <ul class="tabs">
+                        <li class="tab col s3"><a href="#tab-mihome" class="translate active">MiHome-Settings</a></li>
+                        <li class="tab col s3"><a href="#tab-generel" class="translate active">Generel-Settings</a></li>
+                    </ul>
+                </div>
+                <div id="tab-generel" class="col s12 page">
+                    <div class="card-panel">
+                        <div class="col s12">
+                            <h5 class="left">Generel Configuration</h5>
+                        </div>
+                        <div class="row">
+                            <div class="col s12 m4 l5">
+                                <input id="GENEREL_default_timout" class="value" />
+                                <label class="translate" for="GENEREL_default_timout">General Request Time [ms]</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="tab-mihome" class="col s12 page">
+                    <div class="card-panel">
+                        <div class="col s12">
+                            <h5 class="left">Generel Configuration</h5>
+                        </div>
+                        <div class="row"></div>
+                        <div class="row" id="autRefreshMiHome">
+                            <div class="col s12 m8 l5">
+                                <input class="value" id="MIIO_autoRefresh" type="checkbox" />
+                                <span class="translate" for="MIIO_autoRefresh">AutoRefresh from Cloud</span>
+                            </div>
+                            <div class="row">
+                                <div class="col s12 m4 l5">
+                                    <input id="MIIO_autoRefreshTimeout" class="value" />
+                                    <label class="translate" for="MIIO_autoRefreshTimeout">Autorefresh Time [ms]</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-panel">
+                        <div class="col s12">
+                            <h5 class="left">MiHome Configuration 1</h5>
+                        </div>
+                        <div class="row"></div>
+                        <div class="row">
+                            <div class="col s12 m12 l5">
+                                <input class="value" id="MIIO_activatedConfig1" type="checkbox" />
+                                <span class="translate" for="MIIO_activatedConfig1">Config1 Active</span>
+                            </div>
+                        </div>
+                        <div id="miHomeConfig1">
+                            <div class="row">
+                                <div class="col s12 m12 l5">
+                                    <input class="value" id="MIIO_login1" />
+                                    <label class="translate" for="key">Login</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12 m12 l5">
+                                    <input id="MIIO_password1" type="password" class="value" />
+                                    <label class="translate" for="key">Password</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12 m12 l5">
+                                    <input class="value" id="MIIO_country1" />
+                                    <label class="translate" for="key">Country</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="card-panel">
+                        <div class="col s12">
+                            <h5 class="left">MiHome Configuration 2</h5>
+                        </div>
+                        <div class="row"></div>
+                        <div class="row">
+                            <div class="col s12 m8 l5">
+                                <input class="value" id="MIIO_activatedConfig2" type="checkbox" />
+                                <span class="translate" for="MIIO_activatedConfig2">Config2 Active</span>
+                            </div>
+                        </div>
+                        <div id="miHomeConfig2">
+                            <div class="row">
+                                <div class="col s12 m12 l5">
+                                    <input class="value" id="MIIO_login2" />
+                                    <label class="translate" for="key">Login</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12 m12 l5">
+                                    <input id="MIIO_password2" type="password" class="value" />
+                                    <label class="translate" for="key">Password</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12 m12 l5">
+                                    <input class="value" id="MIIO_country2" />
+                                    <label class="translate" for="key">Country</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <!-- Put your content here -->
-
-        <!-- For example columns with settings: -->
-        <div class="row">
-            <div class="col s6 input-field">
-                <input type="checkbox" class="value" id="option1" />
-                <label for="option1" class="translate">option1</label>
-            </div>
-
-            <div class="col s6 input-field">
-                <input type="text" class="value" id="option2" />
-                <label for="option2" class="translate">option2</label>
-            </div>
-        </div>
-
-    </div>
-
-</body>
-
+    </body>
 </html>

@@ -15,7 +15,9 @@ var __copyProps = (to, from, except, desc) => {
 };
 var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target, mod));
 var utils = __toESM(require("@iobroker/adapter-core"));
+var import_miio_service = require("./nestjs/iobroker/services/miio-service");
 var import_main = __toESM(require("./nestjs/main"));
+let MIOO_intervall;
 class SgWebapi extends utils.Adapter {
   constructor(options = {}) {
     super({
@@ -26,21 +28,22 @@ class SgWebapi extends utils.Adapter {
     this.on("unload", this.onUnload.bind(this));
   }
   async onReady() {
+    var _a;
     this.log.warn("onReady1");
     (0, import_main.default)(this);
+    if (this.config.MIIO_autoRefresh) {
+      (0, import_miio_service.getFullSimpleDeviceList)();
+      MIOO_intervall = this.setInterval(() => {
+        (0, import_miio_service.getFullSimpleDeviceList)();
+      }, (_a = this.config["MIIO_autoRefreshTimeout"]) != null ? _a : 5e4);
+    }
   }
-  onUnload(callback) {
+  async onUnload(callback) {
     try {
+      this.clearInterval(MIOO_intervall);
       callback();
     } catch (e) {
       callback();
-    }
-  }
-  onStateChange(id, state) {
-    if (state) {
-      this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
-    } else {
-      this.log.info(`state ${id} deleted`);
     }
   }
 }

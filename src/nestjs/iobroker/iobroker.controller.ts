@@ -3,6 +3,7 @@ import { DEFAULT_TIMEOUT } from '../main';
 import { ValidationPipe } from '../validation.pipe';
 import { Result } from './interfaces/result.interface';
 import { AllInstanceService, GetAllInstanceNames_DTO } from './services/all-instances.service';
+import { MIIOService, MIIO_DTO } from './services/miio-service';
 import {
     SearchAllTypesWithNamePatternIncludesBatch_DTO,
     SearchAllTypesWithNamePatternIncludes_DTO,
@@ -16,9 +17,11 @@ export class IobrokerController {
         private allInstanceServise: AllInstanceService,
         private searchObjectService: SearchObjectService,
         private sendToService: SendToService,
+        private mIIOService: MIIOService,
     ) {
         this.allInstanceServise = new AllInstanceService();
         this.searchObjectService = new SearchObjectService();
+        this.mIIOService = new MIIOService();
     }
 
     @Get('allInstanceNames')
@@ -31,9 +34,9 @@ export class IobrokerController {
     @Get('searchAllTypesWithNamePatternIncludes')
     @UsePipes(new ValidationPipe({ meta: SearchAllTypesWithNamePatternIncludes_DTO }))
     async searchAllTypesWithNamePatternIncludes(
-        @Query() { type, pattern, timeout = DEFAULT_TIMEOUT }: SearchAllTypesWithNamePatternIncludes_DTO,
+        @Query() { type, pattern, timeout = DEFAULT_TIMEOUT, path = '*' }: SearchAllTypesWithNamePatternIncludes_DTO,
     ): Promise<Result> {
-        return this.searchObjectService.searchAllTypesWithNamePatternIncludes({ type, pattern, timeout });
+        return this.searchObjectService.searchAllTypesWithNamePatternIncludes({ type, pattern, timeout, path });
     }
 
     @Post('searchAllTypesWithNamePatternIncludesBatch')
@@ -49,5 +52,17 @@ export class IobrokerController {
         @Body() { instance, command, message = {}, timeout = DEFAULT_TIMEOUT }: SendTo_DTO,
     ): Promise<Result> {
         return this.sendToService.sendTo({ instance, command, message, timeout });
+    }
+
+    @Post('miioGetSimpleMappingPost')
+    public async miioGetSimpleMappingPost(
+        @Body() { login, password, country, timeout = DEFAULT_TIMEOUT }: MIIO_DTO,
+    ): Promise<Result> {
+        return this.mIIOService.getSimpleMapping({ login, password, country, timeout });
+    }
+
+    @Get('miioGetSimpleMappingGet')
+    public async miioGetSimpleMappingGet(): Promise<any> {
+        return this.mIIOService.getSimpleMappingAll();
     }
 }

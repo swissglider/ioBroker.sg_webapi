@@ -54,8 +54,9 @@ __decorateClass([
 ], SendTo_DTO.prototype, "timeout", 2);
 let SendToService = class {
   async sendTo({ instance, command, message, timeout = import_main.DEFAULT_TIMEOUT }) {
-    var _a;
-    const sendToResultPromise = (_a = import_main.AdapterStr.adapter) == null ? void 0 : _a.sendToAsync(instance, command, message);
+    var _a, _b;
+    (_a = import_main.AdapterStr.adapter) == null ? void 0 : _a.log.info("SendToService");
+    const sendToResultPromise = (_b = import_main.AdapterStr.adapter) == null ? void 0 : _b.sendToAsync(instance, command, message);
     const timoutPromise = new Promise((resolve) => {
       setTimeout(resolve, timeout, { error: `TimeoutError on ${instance} : ${command} after ${timeout}ms` });
     });

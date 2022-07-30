@@ -21,6 +21,7 @@ const getAllInstances = async (timeout: number): Promise<any> => {
 @Injectable()
 export class AllInstanceService {
     async getAllInstanceNames({ timeout = DEFAULT_TIMEOUT }: GetAllInstanceNames_DTO): Promise<Result> {
+        AdapterStr.adapter?.log.info('AllInstanceService');
         const result = await getAllInstances(timeout);
         if (result && typeof result === 'object' && result.hasOwnProperty('system.adapter.admin.0')) {
             return { result: Object.keys(result).map((e) => e.substring(15)) };

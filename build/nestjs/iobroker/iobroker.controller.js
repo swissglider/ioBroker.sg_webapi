@@ -35,27 +35,36 @@ var import_common = require("@nestjs/common");
 var import_main = require("../main");
 var import_validation = require("../validation.pipe");
 var import_all_instances = require("./services/all-instances.service");
+var import_miio_service = require("./services/miio-service");
 var import_search_object = require("./services/search-object.service");
 let IobrokerController = class {
-  constructor(allInstanceServise, searchObjectService, sendToService) {
+  constructor(allInstanceServise, searchObjectService, sendToService, mIIOService) {
     this.allInstanceServise = allInstanceServise;
     this.searchObjectService = searchObjectService;
     this.sendToService = sendToService;
+    this.mIIOService = mIIOService;
     this.allInstanceServise = new import_all_instances.AllInstanceService();
     this.searchObjectService = new import_search_object.SearchObjectService();
+    this.mIIOService = new import_miio_service.MIIOService();
   }
   async getAllInstanceNames({ timeout = import_main.DEFAULT_TIMEOUT }) {
     console.log("==== Start getAllInstanceNames 1 ====");
     return this.allInstanceServise.getAllInstanceNames({ timeout });
   }
-  async searchAllTypesWithNamePatternIncludes({ type, pattern, timeout = import_main.DEFAULT_TIMEOUT }) {
-    return this.searchObjectService.searchAllTypesWithNamePatternIncludes({ type, pattern, timeout });
+  async searchAllTypesWithNamePatternIncludes({ type, pattern, timeout = import_main.DEFAULT_TIMEOUT, path = "*" }) {
+    return this.searchObjectService.searchAllTypesWithNamePatternIncludes({ type, pattern, timeout, path });
   }
   async searchAllTypesWithNamePatternIncludesBatch({ batch, timeout = import_main.DEFAULT_TIMEOUT }) {
     return this.searchObjectService.searchAllTypesWithNamePatternIncludesBatch({ batch, timeout });
   }
   async sendTo({ instance, command, message = {}, timeout = import_main.DEFAULT_TIMEOUT }) {
     return this.sendToService.sendTo({ instance, command, message, timeout });
+  }
+  async miioGetSimpleMappingPost({ login, password, country, timeout = import_main.DEFAULT_TIMEOUT }) {
+    return this.mIIOService.getSimpleMapping({ login, password, country, timeout });
+  }
+  async miioGetSimpleMappingGet() {
+    return this.mIIOService.getSimpleMappingAll();
   }
 };
 __decorateClass([
@@ -77,6 +86,13 @@ __decorateClass([
   (0, import_common.Post)("sendTo"),
   __decorateParam(0, (0, import_common.Body)())
 ], IobrokerController.prototype, "sendTo", 1);
+__decorateClass([
+  (0, import_common.Post)("miioGetSimpleMappingPost"),
+  __decorateParam(0, (0, import_common.Body)())
+], IobrokerController.prototype, "miioGetSimpleMappingPost", 1);
+__decorateClass([
+  (0, import_common.Get)("miioGetSimpleMappingGet")
+], IobrokerController.prototype, "miioGetSimpleMappingGet", 1);
 IobrokerController = __decorateClass([
   (0, import_common.Controller)("iobroker")
 ], IobrokerController);

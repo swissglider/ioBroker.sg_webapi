@@ -119,6 +119,10 @@ For later updates, the above procedure is not necessary. Just do the following:
     ### **WORK IN PROGRESS**
 -->
 
+### **WORK IN PROGRESS**
+
+-   (Swissglider) Added miio-service
+
 ### 1.0.0 (2022-07-10)
 
 -   (Swissglider) Version 1

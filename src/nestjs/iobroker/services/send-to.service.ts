@@ -24,6 +24,7 @@ export class SendTo_DTO {
 @Injectable()
 export class SendToService {
     public async sendTo({ instance, command, message, timeout = DEFAULT_TIMEOUT }: SendTo_DTO): Promise<Result> {
+        AdapterStr.adapter?.log.info('SendToService');
         const sendToResultPromise = AdapterStr.adapter?.sendToAsync(instance, command, message);
         const timoutPromise = new Promise((resolve) => {
             setTimeout(resolve, timeout, { error: `TimeoutError on ${instance} : ${command} after ${timeout}ms` });

@@ -28,11 +28,13 @@ var import_app = require("./app.module");
 const AdapterStr = {
   adapter: void 0
 };
-const DEFAULT_TIMEOUT = 5e3;
+let DEFAULT_TIMEOUT = 2e4;
 async function bootstrap(adapter) {
+  var _a;
   AdapterStr.adapter = adapter;
   const app = await import_core.NestFactory.create(import_app.AppModule);
   await app.listen(8089);
+  DEFAULT_TIMEOUT = ((_a = AdapterStr.adapter) == null ? void 0 : _a.config)["GENEREL_default_timout"] || 5e3;
 }
 var main_default = bootstrap;
 // Annotate the CommonJS export names for ESM import in node:

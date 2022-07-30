@@ -84,8 +84,9 @@ let SearchObjectService = class {
     path = "*",
     timeout = import_main.DEFAULT_TIMEOUT
   }) {
-    var _a;
-    const testResultPromise = (_a = import_main.AdapterStr.adapter) == null ? void 0 : _a.getForeignObjectsAsync(path, type);
+    var _a, _b;
+    (_a = import_main.AdapterStr.adapter) == null ? void 0 : _a.log.info("SearchObjectService");
+    const testResultPromise = (_b = import_main.AdapterStr.adapter) == null ? void 0 : _b.getForeignObjectsAsync(path, type);
     const timoutPromise = new Promise((resolve) => {
       setTimeout(resolve, timeout, { error: `TimeoutError on AllInstanceService after ${timeout}ms` });
     });

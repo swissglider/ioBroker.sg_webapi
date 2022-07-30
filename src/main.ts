@@ -5,10 +5,13 @@
 // The adapter-core module gives you access to the core ioBroker functions
 // you need to create an adapter
 import * as utils from '@iobroker/adapter-core';
+import { getFullSimpleDeviceList } from './nestjs/iobroker/services/miio-service';
 import bootstrap from './nestjs/main';
 
 // Load your modules here, e.g.:
 // import * as fs from "fs";
+
+let MIOO_intervall: ioBroker.Interval;
 
 class SgWebapi extends utils.Adapter {
     public constructor(options: Partial<utils.AdapterOptions> = {}) {
@@ -29,18 +32,25 @@ class SgWebapi extends utils.Adapter {
     private async onReady(): Promise<void> {
         this.log.warn('onReady1');
         bootstrap(this);
+        if (this.config.MIIO_autoRefresh) {
+            getFullSimpleDeviceList();
+            MIOO_intervall = this.setInterval(() => {
+                getFullSimpleDeviceList();
+            }, this.config['MIIO_autoRefreshTimeout'] ?? 50000);
+        }
     }
 
     /**
      * Is called when adapter shuts down - callback has to be called under any circumstances!
      */
-    private onUnload(callback: () => void): void {
+    private async onUnload(callback: () => void): Promise<void> {
         try {
             // Here you must clear all timeouts or intervals that may still be active
             // clearTimeout(timeout1);
             // clearTimeout(timeout2);
             // ...
             // clearInterval(interval1);
+            this.clearInterval(MIOO_intervall);
 
             callback();
         } catch (e) {
@@ -66,15 +76,19 @@ class SgWebapi extends utils.Adapter {
     /**
      * Is called if a subscribed state changes
      */
-    private onStateChange(id: string, state: ioBroker.State | null | undefined): void {
-        if (state) {
-            // The state was changed
-            this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
-        } else {
-            // The state was deleted
-            this.log.info(`state ${id} deleted`);
-        }
-    }
+    // private onStateChange(id: string, state: ioBroker.State | null | undefined): void {
+    //     if (this.config.MIIO_autoRefresh) {
+    //         this.log.error(id);
+    //     }
+    //     this.log.warn('hallo');
+    //     if (state) {
+    //         // The state was changed
+    //         this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
+    //     } else {
+    //         // The state was deleted
+    //         this.log.info(`state ${id} deleted`);
+    //     }
+    // }
 
     // If you need to accept messages in your adapter, uncomment the following block and the corresponding line in the constructor.
     // /**

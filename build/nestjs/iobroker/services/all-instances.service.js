@@ -51,6 +51,8 @@ const getAllInstances = async (timeout) => {
 };
 let AllInstanceService = class {
   async getAllInstanceNames({ timeout = import_main.DEFAULT_TIMEOUT }) {
+    var _a;
+    (_a = import_main.AdapterStr.adapter) == null ? void 0 : _a.log.info("AllInstanceService");
     const result = await getAllInstances(timeout);
     if (result && typeof result === "object" && result.hasOwnProperty("system.adapter.admin.0")) {
       return { result: Object.keys(result).map((e) => e.substring(15)) };

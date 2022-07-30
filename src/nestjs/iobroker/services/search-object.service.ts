@@ -55,6 +55,7 @@ export class SearchObjectService {
         path = '*',
         timeout = DEFAULT_TIMEOUT,
     }: SearchAllTypesWithNamePatternIncludes_DTO): Promise<Result> {
+        AdapterStr.adapter?.log.info('SearchObjectService');
         const testResultPromise = AdapterStr.adapter?.getForeignObjectsAsync(path, type);
         const timoutPromise = new Promise((resolve) => {
             setTimeout(resolve, timeout, { error: `TimeoutError on AllInstanceService after ${timeout}ms` });

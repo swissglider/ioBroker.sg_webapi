@@ -8,12 +8,13 @@ export const AdapterStr: T_AdapterStr = {
     adapter: undefined,
 };
 
-export const DEFAULT_TIMEOUT = 5000;
+export let DEFAULT_TIMEOUT = 20000;
 
 async function bootstrap(adapter: ioBroker.Adapter): Promise<any> {
     AdapterStr.adapter = adapter;
     const app = await NestFactory.create(AppModule);
     await app.listen(8089);
+    DEFAULT_TIMEOUT = (AdapterStr.adapter?.config as any)['GENEREL_default_timout'] || 5000;
 }
 
 export default bootstrap;

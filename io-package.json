@@ -53,16 +53,8 @@
             "pl": "Adapter NestJS do dostępu do interfejsu API Rest do funkcji nieobjętych standardowym prostym interfejsem API, takim jak sendTo",
             "zh-cn": "NestJS 适配器，用于 Rest API 访问标准简单 Api（如 sendTo）未涵盖的功能"
         },
-        "authors": [
-            "Swissglider <npm@mailschweiz.com>"
-        ],
-        "keywords": [
-            "NestJS",
-            "Swissglider",
-            "Web",
-            "API",
-            "REST"
-        ],
+        "authors": ["Swissglider <npm@mailschweiz.com>"],
+        "keywords": ["NestJS", "Swissglider", "Web", "API", "REST"],
         "license": "MIT",
         "platform": "Javascript/Node.js",
         "main": "build/main.js",
@@ -84,9 +76,20 @@
         ]
     },
     "native": {
-        "option1": true,
-        "option2": "42"
+        "GENEREL_default_timout": 10000,
+        "MIIO_login1": "",
+        "MIIO_password1": "",
+        "MIIO_country1": "",
+        "MIIO_login2": "",
+        "MIIO_password2": "",
+        "MIIO_country2": "",
+        "MIIO_autoRefresh": true,
+        "MIIO_autoRefreshTimeout": 50000,
+        "MIIO_activatedConfig1": false,
+        "MIIO_activatedConfig2": true
     },
+    "protectedNative": ["MIIO_password1", "MIIO_password2"],
+    "encryptedNative": ["MIIO_password1", "MIIO_password2"],
     "objects": [],
     "instanceObjects": []
 }
