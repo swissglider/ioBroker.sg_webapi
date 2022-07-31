@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "sg_webapi",
-        "version": "2.0.0",
+        "version": "2.1.0",
         "news": {
+            "2.1.0": {
+                "en": "Extended miio-service",
+                "de": "Erweiterter miio-service",
+                "ru": "Расширенный miio-service",
+                "pt": "Serviço de miio estendido",
+                "nl": "Verlengde miio-service",
+                "fr": "Miio-service élargi",
+                "it": "Miio-servizio esteso",
+                "es": "Miio-servicio extendido",
+                "pl": "Serwis miio-service",
+                "zh-cn": "常 费"
+            },
             "2.0.0": {
                 "en": "Added miio-service",
                 "de": "Miio-Service hinzugefügt",
