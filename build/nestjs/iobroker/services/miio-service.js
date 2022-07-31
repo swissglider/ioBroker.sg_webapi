@@ -62,11 +62,33 @@ const _getDeviceList = async ({ login, password, country = "" }) => {
     const apiMiIO = new ApiMiIO();
     const { userId, token, ssecurity } = await authMiIO.login(login, password);
     const devices = await apiMiIO.getDeviceList(userId, ssecurity, token, country);
-    const testResultPromise = await ((_a = import_main.AdapterStr.adapter) == null ? void 0 : _a.getForeignObjectsAsync("mihome.*", "channel"));
-    if (testResultPromise) {
-      console.log(Object.fromEntries(Object.entries(testResultPromise).filter(([key]) => key.match(/^mihome\.[0-9]\.devices/i))));
+    const channelResultPromise = await ((_a = import_main.AdapterStr.adapter) == null ? void 0 : _a.getForeignObjectsAsync("mihome.*", "channel"));
+    if (channelResultPromise) {
+      const filtered = Object.fromEntries(Object.entries(channelResultPromise).filter(([key]) => key.match(/^mihome\.[0-9]\.devices/i)));
+      const returnA = await Promise.all(devices.map(async (e) => {
+        var _a2;
+        const did = e.did.split(".").pop();
+        const ioBrokerChannel = Object.values(filtered).find((ee) => ee.native.sid === did);
+        let availableStyleButtons = [];
+        if (ioBrokerChannel) {
+          const buttonPromise = await ((_a2 = import_main.AdapterStr.adapter) == null ? void 0 : _a2.getForeignObjectsAsync(ioBrokerChannel._id + ".*", "state"));
+          if (buttonPromise) {
+            availableStyleButtons = Object.values(buttonPromise).map((bp) => ({
+              name: bp.common.name.toString(),
+              id: bp._id,
+              role: bp.common.role
+            }));
+          }
+        }
+        return {
+          ...e,
+          ioBrokerChannelPath: ioBrokerChannel ? ioBrokerChannel._id : "",
+          availableStyleButtons
+        };
+      }));
+      return returnA;
     }
-    return devices;
+    return [];
   } catch (error) {
     throw error;
   }
@@ -99,11 +121,11 @@ const generateFullSimpleDeviceList = async (configS = void 0, timeout = import_m
   configA.forEach((e) => {
     promises.push(_getDeviceList(e));
   });
-  const timoutPromise = new Promise((resolve) => {
+  const timeoutPromise = new Promise((resolve) => {
     setTimeout(resolve, timeout, { error: `TimeoutError on miio test after ${timeout}ms` });
   });
   try {
-    const result1 = await Promise.race([Promise.all(promises), timoutPromise]);
+    const result1 = await Promise.race([Promise.all(promises), timeoutPromise]);
     if (result1.hasOwnProperty("error")) {
       return result1;
     }
@@ -123,7 +145,9 @@ const generateFullSimpleDeviceList = async (configS = void 0, timeout = import_m
           channelType: subs[0] ? subs[0] : "",
           room: subs[1] ? subs[1] : "",
           place: subs[2] ? subs[2] : "",
-          ioBrokerChannelPath: e.did
+          ioBrokerChannelPath: e.ioBrokerChannelPath,
+          availableStyleButtons: e.availableStyleButtons,
+          orgMIIOCloudInfo: e
         };
       }));
     });

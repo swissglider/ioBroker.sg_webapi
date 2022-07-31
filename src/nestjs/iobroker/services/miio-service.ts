@@ -57,16 +57,42 @@ const _getDeviceList = async ({ login, password, country = '' }: Config_T): Prom
         const { userId, token, ssecurity } = await authMiIO.login(login, password);
         const devices = await apiMiIO.getDeviceList(userId, ssecurity, token, country);
 
-        const testResultPromise = await AdapterStr.adapter?.getForeignObjectsAsync('mihome.*', 'channel');
-        if (testResultPromise) {
-            console.log(
-                Object.fromEntries(
-                    Object.entries(testResultPromise).filter(([key]) => key.match(/^mihome\.[0-9]\.devices/i)),
-                ),
+        const channelResultPromise = await AdapterStr.adapter?.getForeignObjectsAsync('mihome.*', 'channel');
+        if (channelResultPromise) {
+            const filtered = Object.fromEntries(
+                Object.entries(channelResultPromise).filter(([key]) => key.match(/^mihome\.[0-9]\.devices/i)),
             );
+            const returnA = await Promise.all(
+                devices.map(async (e: any): Promise<any> => {
+                    const did = e.did.split('.').pop();
+                    const ioBrokerChannel = Object.values(filtered).find((ee: any) => ee.native.sid === did);
+                    let availableStyleButtons: { name: string; id: string; role: string }[] = [];
+                    if (ioBrokerChannel) {
+                        const buttonPromise = await AdapterStr.adapter?.getForeignObjectsAsync(
+                            ioBrokerChannel._id + '.*',
+                            'state',
+                        );
+                        if (buttonPromise) {
+                            availableStyleButtons = Object.values(buttonPromise).map((bp) => ({
+                                name: bp.common.name.toString(),
+                                id: bp._id,
+                                role: bp.common.role,
+                            }));
+                        }
+                    }
+                    return {
+                        ...e,
+                        ioBrokerChannelPath: ioBrokerChannel ? ioBrokerChannel._id : '',
+                        availableStyleButtons,
+                    };
+                }),
+            );
+            return returnA;
         }
 
-        return devices;
+        // console.log(devices);
+
+        return [];
     } catch (error) {
         throw error;
     }
@@ -101,12 +127,12 @@ const generateFullSimpleDeviceList = async (
     configA.forEach((e) => {
         promises.push(_getDeviceList(e));
     });
-    const timoutPromise = new Promise((resolve) => {
+    const timeoutPromise = new Promise((resolve) => {
         setTimeout(resolve, timeout, { error: `TimeoutError on miio test after ${timeout}ms` });
     });
 
     try {
-        const result1: any = await Promise.race([Promise.all(promises), timoutPromise]);
+        const result1: any = await Promise.race([Promise.all(promises), timeoutPromise]);
         if (result1.hasOwnProperty('error')) {
             return result1;
         }
@@ -128,7 +154,9 @@ const generateFullSimpleDeviceList = async (
                         channelType: subs[0] ? subs[0] : '',
                         room: subs[1] ? subs[1] : '',
                         place: subs[2] ? subs[2] : '',
-                        ioBrokerChannelPath: e.did,
+                        ioBrokerChannelPath: e.ioBrokerChannelPath,
+                        availableStyleButtons: e.availableStyleButtons,
+                        orgMIIOCloudInfo: e,
                     };
                 }),
             );
