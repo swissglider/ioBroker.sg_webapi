@@ -1,6 +1,6 @@
 {
   "name": "iobroker.sg_webapi",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "NestJS Adapter for Rest API access to function not covered by the standard simple Api like sendTo",
   "author": {
     "name": "Swissglider",

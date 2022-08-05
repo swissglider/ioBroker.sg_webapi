@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "sg_webapi",
-        "version": "2.1.0",
+        "version": "2.2.0",
         "news": {
+            "2.2.0": {
+                "en": "URL Notification Subscription Service added",
+                "de": "URL Anmeldung Abonnement Service hinzugefügt",
+                "ru": "URL Уведомление Подписка Сервис добавлен",
+                "pt": "Serviço de Subscrição de Notificação de URL adicionado",
+                "nl": "Vertaling:",
+                "fr": "Service de notification de l'URL",
+                "it": "URL Notifica servizio di abbonamento aggiunto",
+                "es": "Servicio de suscripción de notificaciones URL añadido",
+                "pl": "Oficjalna strona URL",
+                "zh-cn": "URL 通知处"
+            },
             "2.1.0": {
                 "en": "Extended miio-service",
                 "de": "Erweiterter miio-service",
