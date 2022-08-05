@@ -14,6 +14,7 @@ async function bootstrap(adapter: ioBroker.Adapter): Promise<any> {
     AdapterStr.adapter = adapter;
     const app = await NestFactory.create(AppModule);
     await app.listen(8089);
+    console.log(`Application is running on: ${await app.getUrl()}`);
     DEFAULT_TIMEOUT = (AdapterStr.adapter?.config as any)['GENEREL_default_timout'] || 5000;
 }
 

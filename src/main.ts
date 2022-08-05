@@ -6,6 +6,7 @@
 // you need to create an adapter
 import * as utils from '@iobroker/adapter-core';
 import { getFullSimpleDeviceList } from './nestjs/iobroker/services/miio-service';
+import { UrlNotificationSubscriptionServiceListener } from './nestjs/iobroker/services/url-notification-subscription-service';
 import bootstrap from './nestjs/main';
 
 // Load your modules here, e.g.:
@@ -20,7 +21,7 @@ class SgWebapi extends utils.Adapter {
             name: 'sg_webapi',
         });
         this.on('ready', this.onReady.bind(this));
-        // this.on('stateChange', this.onStateChange.bind(this));
+        this.on('stateChange', this.onStateChange.bind(this));
         // this.on('objectChange', this.onObjectChange.bind(this));
         // this.on('message', this.onMessage.bind(this));
         this.on('unload', this.onUnload.bind(this));
@@ -76,19 +77,17 @@ class SgWebapi extends utils.Adapter {
     /**
      * Is called if a subscribed state changes
      */
-    // private onStateChange(id: string, state: ioBroker.State | null | undefined): void {
-    //     if (this.config.MIIO_autoRefresh) {
-    //         this.log.error(id);
-    //     }
-    //     this.log.warn('hallo');
-    //     if (state) {
-    //         // The state was changed
-    //         this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
-    //     } else {
-    //         // The state was deleted
-    //         this.log.info(`state ${id} deleted`);
-    //     }
-    // }
+    private onStateChange(id: string, state: ioBroker.State | null | undefined): void {
+        // if (state) {
+        //     // The state was changed
+        //     this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
+        // } else {
+        //     // The state was deleted
+        //     this.log.info(`state ${id} deleted`);
+        // }
+        const operation = state ? 'change' : 'deletion';
+        UrlNotificationSubscriptionServiceListener.listen(id, state, operation);
+    }
 
     // If you need to accept messages in your adapter, uncomment the following block and the corresponding line in the constructor.
     // /**

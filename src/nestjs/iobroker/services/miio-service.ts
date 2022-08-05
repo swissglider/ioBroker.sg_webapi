@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import { AdapterStr, DEFAULT_TIMEOUT } from '../../main';
 import { Result } from '../interfaces/result.interface';
@@ -105,7 +105,7 @@ const generateFullSimpleDeviceList = async (
     const promises: any[] = [];
     const config = AdapterStr.adapter?.config;
     const configA: Config_T[] = [];
-    if (!config) return { error: 'wrong configuration ??' };
+    if (!config) throw new InternalServerErrorException('wrong configuration ??');
     if (!configS) {
         if (config['MIIO_activatedConfig1']) {
             configA.push({

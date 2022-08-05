@@ -30,6 +30,7 @@ __export(iobroker_module_exports, {
   IobrokerModule: () => IobrokerModule
 });
 module.exports = __toCommonJS(iobroker_module_exports);
+var import_axios = require("@nestjs/axios");
 var import_common = require("@nestjs/common");
 var import_iobroker = require("./iobroker.controller");
 var import_all_instances = require("./services/all-instances.service");
@@ -39,6 +40,7 @@ let IobrokerModule = class {
 };
 IobrokerModule = __decorateClass([
   (0, import_common.Module)({
+    imports: [import_axios.HttpModule],
     controllers: [import_iobroker.IobrokerController],
     providers: [import_all_instances.AllInstanceService, import_search_object.SearchObjectService, import_send_to.SendToService]
   })

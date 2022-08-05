@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@iobroker/adapter-core": "^2.6.0",
+    "@nestjs/axios": "^0.1.0",
     "@nestjs/common": "^9.0.1",
     "@nestjs/core": "^9.0.1",
     "@nestjs/platform-express": "^9.0.1",

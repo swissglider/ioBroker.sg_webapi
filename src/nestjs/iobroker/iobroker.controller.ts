@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common';
 import { DEFAULT_TIMEOUT } from '../main';
 import { ValidationPipe } from '../validation.pipe';
 import { Result } from './interfaces/result.interface';
@@ -10,6 +10,10 @@ import {
     SearchObjectService,
 } from './services/search-object.service';
 import { SendToService, SendTo_DTO } from './services/send-to.service';
+import {
+    AddURLNotification_DTO,
+    URLNotificationSubscriptionService,
+} from './services/url-notification-subscription-service';
 
 @Controller('iobroker')
 export class IobrokerController {
@@ -18,10 +22,12 @@ export class IobrokerController {
         private searchObjectService: SearchObjectService,
         private sendToService: SendToService,
         private mIIOService: MIIOService,
+        private urlNotificationSubscriptionService: URLNotificationSubscriptionService,
     ) {
         this.allInstanceServise = new AllInstanceService();
         this.searchObjectService = new SearchObjectService();
         this.mIIOService = new MIIOService();
+        this.urlNotificationSubscriptionService = new URLNotificationSubscriptionService();
     }
 
     @Get('allInstanceNames')
@@ -64,5 +70,33 @@ export class IobrokerController {
     @Get('miioGetSimpleMappingGet')
     public async miioGetSimpleMappingGet(): Promise<any> {
         return this.mIIOService.getSimpleMappingAll();
+    }
+
+    /**
+     * add a state to subscribe.
+     * if this state will change, the given urls will be called with the new state object
+     * @param {stateID, urls, timeout}:AddURLNotification_DTO
+     * @returns
+     */
+    @Post('addURLNotificationSubscription')
+    public async addURLNotificationSubscription(
+        @Body() { stateID, urls, timeout }: AddURLNotification_DTO,
+    ): Promise<Result> {
+        // check if parameters are ok
+        if (!stateID) throw new BadRequestException('stateID musst be set');
+        if (!(Array.isArray(urls) && urls.length > 0 && urls.every((url) => typeof url == 'string')))
+            throw new BadRequestException('urls must be an Array of Strings');
+        // check if valid URL'
+        for (const url of urls) {
+            let returnFalse = false;
+            try {
+                returnFalse = !Boolean(new URL(url));
+            } catch (error) {
+                returnFalse = true;
+            }
+            if (returnFalse) throw new BadRequestException(`the URL ${url} are not valid`);
+        }
+
+        return this.urlNotificationSubscriptionService.addURLNotificationSubscription({ stateID, urls, timeout });
     }
 }

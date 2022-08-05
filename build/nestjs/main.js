@@ -34,6 +34,7 @@ async function bootstrap(adapter) {
   AdapterStr.adapter = adapter;
   const app = await import_core.NestFactory.create(import_app.AppModule);
   await app.listen(8089);
+  console.log(`Application is running on: ${await app.getUrl()}`);
   DEFAULT_TIMEOUT = ((_a = AdapterStr.adapter) == null ? void 0 : _a.config)["GENEREL_default_timout"] || 5e3;
 }
 var main_default = bootstrap;

@@ -99,7 +99,7 @@ const generateFullSimpleDeviceList = async (configS = void 0, timeout = import_m
   const config = (_a = import_main.AdapterStr.adapter) == null ? void 0 : _a.config;
   const configA = [];
   if (!config)
-    return { error: "wrong configuration ??" };
+    throw new import_common.InternalServerErrorException("wrong configuration ??");
   if (!configS) {
     if (config["MIIO_activatedConfig1"]) {
       configA.push({

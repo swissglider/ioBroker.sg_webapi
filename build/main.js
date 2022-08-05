@@ -16,6 +16,7 @@ var __copyProps = (to, from, except, desc) => {
 var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target, mod));
 var utils = __toESM(require("@iobroker/adapter-core"));
 var import_miio_service = require("./nestjs/iobroker/services/miio-service");
+var import_url_notification_subscription_service = require("./nestjs/iobroker/services/url-notification-subscription-service");
 var import_main = __toESM(require("./nestjs/main"));
 let MIOO_intervall;
 class SgWebapi extends utils.Adapter {
@@ -25,6 +26,7 @@ class SgWebapi extends utils.Adapter {
       name: "sg_webapi"
     });
     this.on("ready", this.onReady.bind(this));
+    this.on("stateChange", this.onStateChange.bind(this));
     this.on("unload", this.onUnload.bind(this));
   }
   async onReady() {
@@ -45,6 +47,10 @@ class SgWebapi extends utils.Adapter {
     } catch (e) {
       callback();
     }
+  }
+  onStateChange(id, state) {
+    const operation = state ? "change" : "deletion";
+    import_url_notification_subscription_service.UrlNotificationSubscriptionServiceListener.listen(id, state, operation);
   }
 }
 if (require.main !== module) {

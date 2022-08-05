@@ -37,15 +37,18 @@ var import_validation = require("../validation.pipe");
 var import_all_instances = require("./services/all-instances.service");
 var import_miio_service = require("./services/miio-service");
 var import_search_object = require("./services/search-object.service");
+var import_url_notification_subscription_service = require("./services/url-notification-subscription-service");
 let IobrokerController = class {
-  constructor(allInstanceServise, searchObjectService, sendToService, mIIOService) {
+  constructor(allInstanceServise, searchObjectService, sendToService, mIIOService, urlNotificationSubscriptionService) {
     this.allInstanceServise = allInstanceServise;
     this.searchObjectService = searchObjectService;
     this.sendToService = sendToService;
     this.mIIOService = mIIOService;
+    this.urlNotificationSubscriptionService = urlNotificationSubscriptionService;
     this.allInstanceServise = new import_all_instances.AllInstanceService();
     this.searchObjectService = new import_search_object.SearchObjectService();
     this.mIIOService = new import_miio_service.MIIOService();
+    this.urlNotificationSubscriptionService = new import_url_notification_subscription_service.URLNotificationSubscriptionService();
   }
   async getAllInstanceNames({ timeout = import_main.DEFAULT_TIMEOUT }) {
     console.log("==== Start getAllInstanceNames 1 ====");
@@ -65,6 +68,23 @@ let IobrokerController = class {
   }
   async miioGetSimpleMappingGet() {
     return this.mIIOService.getSimpleMappingAll();
+  }
+  async addURLNotificationSubscription({ stateID, urls, timeout }) {
+    if (!stateID)
+      throw new import_common.BadRequestException("stateID musst be set");
+    if (!(Array.isArray(urls) && urls.length > 0 && urls.every((url) => typeof url == "string")))
+      throw new import_common.BadRequestException("urls must be an Array of Strings");
+    for (const url of urls) {
+      let returnFalse = false;
+      try {
+        returnFalse = !Boolean(new URL(url));
+      } catch (error) {
+        returnFalse = true;
+      }
+      if (returnFalse)
+        throw new import_common.BadRequestException(`the URL ${url} are not valid`);
+    }
+    return this.urlNotificationSubscriptionService.addURLNotificationSubscription({ stateID, urls, timeout });
   }
 };
 __decorateClass([
@@ -93,6 +113,10 @@ __decorateClass([
 __decorateClass([
   (0, import_common.Get)("miioGetSimpleMappingGet")
 ], IobrokerController.prototype, "miioGetSimpleMappingGet", 1);
+__decorateClass([
+  (0, import_common.Post)("addURLNotificationSubscription"),
+  __decorateParam(0, (0, import_common.Body)())
+], IobrokerController.prototype, "addURLNotificationSubscription", 1);
 IobrokerController = __decorateClass([
   (0, import_common.Controller)("iobroker")
 ], IobrokerController);

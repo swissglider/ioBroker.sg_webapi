@@ -1,7 +1,7 @@
 {
   "version": 3,
   "sources": ["../../../src/nestjs/iobroker/iobroker.module.ts"],
-  "sourcesContent": ["import { Module } from '@nestjs/common';\nimport { IobrokerController } from './iobroker.controller';\nimport { AllInstanceService } from './services/all-instances.service';\nimport { SearchObjectService } from './services/search-object.service';\nimport { SendToService } from './services/send-to.service';\n\n@Module({\n    controllers: [IobrokerController],\n    providers: [AllInstanceService, SearchObjectService, SendToService],\n})\nexport class IobrokerModule {}\n"],
-  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA,oBAAuB;AACvB,sBAAmC;AACnC,2BAAmC;AACnC,2BAAoC;AACpC,qBAA8B;AAMvB,IAAM,iBAAN,MAAqB;AAAC;AAAhB,iBAAN;AAAA,EAJP,AAAC,0BAAO;AAAA,IACJ,aAAa,CAAC,kCAAkB;AAAA,IAChC,WAAW,CAAC,yCAAoB,0CAAqB,4BAAa;AAAA,EACtE,CAAC;AAAA,GACY;",
+  "sourcesContent": ["import { HttpModule } from '@nestjs/axios';\nimport { Module } from '@nestjs/common';\nimport { IobrokerController } from './iobroker.controller';\nimport { AllInstanceService } from './services/all-instances.service';\nimport { SearchObjectService } from './services/search-object.service';\nimport { SendToService } from './services/send-to.service';\n\n@Module({\n    imports: [HttpModule],\n    controllers: [IobrokerController],\n    providers: [AllInstanceService, SearchObjectService, SendToService],\n})\nexport class IobrokerModule {}\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA,mBAA2B;AAC3B,oBAAuB;AACvB,sBAAmC;AACnC,2BAAmC;AACnC,2BAAoC;AACpC,qBAA8B;AAOvB,IAAM,iBAAN,MAAqB;AAAC;AAAhB,iBAAN;AAAA,EALP,AAAC,0BAAO;AAAA,IACJ,SAAS,CAAC,uBAAU;AAAA,IACpB,aAAa,CAAC,kCAAkB;AAAA,IAChC,WAAW,CAAC,yCAAoB,0CAAqB,4BAAa;AAAA,EACtE,CAAC;AAAA,GACY;",
   "names": []
 }
