@@ -100,6 +100,35 @@ let IobrokerController = class {
   async deleteURLNotificationSubscriptions(props) {
     return this.urlNotificationSubscriptionService.deleteURLNotificationSubscriptions(props);
   }
+  async addURLNotificationSubscriptions(configs) {
+    for (const { stateID, urls } of configs) {
+      if (!stateID)
+        throw new import_common.BadRequestException("stateID musst be set");
+      if (!(Array.isArray(urls) && urls.length > 0 && urls.every((url) => typeof url == "string")))
+        throw new import_common.BadRequestException("urls must be an Array of Strings");
+      for (const url of urls) {
+        let returnFalse = false;
+        try {
+          returnFalse = !Boolean(new URL(url));
+        } catch (error) {
+          returnFalse = true;
+        }
+        if (returnFalse)
+          throw new import_common.BadRequestException(`the URL ${url} are not valid`);
+      }
+    }
+    const allAddURLNotificationSubscription = [];
+    for (const { stateID, urls, timeout = import_main.DEFAULT_TIMEOUT, forceOverwritte = false } of configs) {
+      allAddURLNotificationSubscription.push(this.urlNotificationSubscriptionService.addURLNotificationSubscription({
+        stateID,
+        urls,
+        timeout,
+        forceOverwritte
+      }));
+    }
+    await Promise.all(allAddURLNotificationSubscription);
+    return this.urlNotificationSubscriptionService.getURLNotificationSubscriptionList();
+  }
 };
 __decorateClass([
   (0, import_common.Get)("allInstanceNames"),
@@ -141,6 +170,10 @@ __decorateClass([
   (0, import_common.Post)("deleteURLNotificationSubscriptions"),
   __decorateParam(0, (0, import_common.Body)())
 ], IobrokerController.prototype, "deleteURLNotificationSubscriptions", 1);
+__decorateClass([
+  (0, import_common.Post)("addURLNotificationSubscriptions"),
+  __decorateParam(0, (0, import_common.Body)())
+], IobrokerController.prototype, "addURLNotificationSubscriptions", 1);
 IobrokerController = __decorateClass([
   (0, import_common.Controller)("iobroker")
 ], IobrokerController);

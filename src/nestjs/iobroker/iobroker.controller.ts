@@ -132,4 +132,47 @@ export class IobrokerController {
     public async deleteURLNotificationSubscriptions(@Body() props: DeleteURLNotifications_DTO): Promise<Result> {
         return this.urlNotificationSubscriptionService.deleteURLNotificationSubscriptions(props);
     }
+
+    /**
+     * add an array of states to subscribe.
+     * if this states will change, the given urls will be called with the new state object
+     * @param [{stateID, urls, timeout, forceOverwritte}]:AddURLNotification_DTO[]
+     * @returns Result Promise with {result: _URL_SUBSCRIPTION {}}
+     */
+    @Post('addURLNotificationSubscriptions')
+    public async addURLNotificationSubscriptions(@Body() configs: AddURLNotification_DTO[]): Promise<Result> {
+        // check if parameters are ok
+        for (const { stateID, urls } of configs) {
+            if (!stateID) throw new BadRequestException('stateID musst be set');
+            if (!(Array.isArray(urls) && urls.length > 0 && urls.every((url) => typeof url == 'string')))
+                throw new BadRequestException('urls must be an Array of Strings');
+            // check if valid URL'
+            for (const url of urls) {
+                let returnFalse = false;
+                try {
+                    returnFalse = !Boolean(new URL(url));
+                } catch (error) {
+                    returnFalse = true;
+                }
+                if (returnFalse) throw new BadRequestException(`the URL ${url} are not valid`);
+            }
+        }
+
+        const allAddURLNotificationSubscription: Promise<Result>[] = [];
+
+        for (const { stateID, urls, timeout = DEFAULT_TIMEOUT, forceOverwritte = false } of configs) {
+            allAddURLNotificationSubscription.push(
+                this.urlNotificationSubscriptionService.addURLNotificationSubscription({
+                    stateID,
+                    urls,
+                    timeout,
+                    forceOverwritte,
+                }),
+            );
+        }
+
+        await Promise.all(allAddURLNotificationSubscription);
+
+        return this.urlNotificationSubscriptionService.getURLNotificationSubscriptionList();
+    }
 }

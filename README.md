@@ -119,6 +119,11 @@ For later updates, the above procedure is not necessary. Just do the following:
     ### **WORK IN PROGRESS**
 -->
 
+### **WORK IN PROGRESS**
+
+-   (Swissglider) URL Notification Subscription Service change:
+    -   add addURLNotificationSubscriptions Array..
+
 ### 2.3.0 (2022-08-06)
 
 -   (Swissglider) URL Notification Subscription Service change:
