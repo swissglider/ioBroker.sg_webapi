@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "sg_webapi",
-        "version": "2.2.0",
+        "version": "2.3.0",
         "news": {
+            "2.3.0": {
+                "en": "URL Notification Subscription Service change:\nadd forceOverwritte to addURLNotificationSubscription\nfixes on addURLNotificationSubscription\nadd getURLNotificationSubscriptionList Method\nadd deleteAllURLNotificationSubscriptions\nadd deleteURLNotificationSubscriptions",
+                "de": "URL Anmeldung Dienständerung:\nzusatzkraft Überschrieben bei addURLNotificationSubscription\nkorrekturen auf addURLNotificationSubscription\nbenachrichtigung hinzufügen Beschreibung\nlöschen AlleURLNotificationSubscriptions\ndeleteURLNotificationSubscriptions hinzufügen",
+                "ru": "URL Уведомление о подписке Изменение службы:\nдобавить силу Overwritte to addURLNotificationПодписка\nисправления на addURLNotificationПодписка\nдобавить getURLNotification ПодпискаСписок Метод\nдобавить удалить ВсеURLNotificationПодписки\nдобавить removeURLNotificationПодписки",
+                "pt": "Alteração do Serviço de Assinatura de Notificação de URL:\nadicionar força Overwritte para addURLNotificação Assinatura\ncorreções em addURLNotificationSubscription\nadicionar getURLNotificação Método de Subscrição\nadicionar Assinaturas de notificação da AllURL\nadicionar deleteURLNotificationSubscriptions",
+                "nl": "Vertaling:\nvertaling: Overschrijving van de toevoeging\nvertaling:\nvertaling: Vertaling:\nverwijdering. Vertaling:\nvertaling:",
+                "fr": "Modification du service de notification d'URL:\najouter la force Répercussions pour addURLNotificationAbonnement\ncorrections sur addURLNotificationAbonnement\najouter getURLNotification Méthode AbonnementListe\najouter supprimer AllURLNotificationAbonnements\nadd deleteURLNotificationAbonnements",
+                "it": "Modifica del servizio:\naggiungere forza Overwritte per aggiungereURLNotificationSubscription\ncorrezioni su addURLNotificationSubscription\naggiungere getURLNotificazione Metodo di sottoscrizione\naggiungere cancella AllURLNotificationSubscriptions\naggiungere deleteURLNotificationSubscriptions",
+                "es": "Cambio de servicio de suscripción de la URL:\nañadir fuerza Sobrescrito para añadirURLNotificaciónSubscripción\nfijaciones en addURLNotificationSubscription\nañadir getURLNotificación Método subscriptionLista\nagregar borrado AllURLNotificaciónSubscripciones\nañadir deleteURLNotificationSubscriptions",
+                "pl": "URL Zmiana usług subskrypcyjnych\nsiła Przetrwałość dodania\naddministracja\ndodać Metodystyczny\ndodać AllURLNotificationSubscriptions (ang.)\nadministracja",
+                "zh-cn": "统一通知服务更改:\n增 编 增加欧元\nf 增加欧元\n增加 说明\n增 编 所有URL 登记\n删除"
+            },
             "2.2.0": {
                 "en": "URL Notification Subscription Service added",
                 "de": "URL Anmeldung Abonnement Service hinzugefügt",
