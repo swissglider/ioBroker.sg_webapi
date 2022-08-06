@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "sg_webapi",
-        "version": "2.3.0",
+        "version": "2.3.1",
         "news": {
+            "2.3.1": {
+                "en": "URL Notification Subscription Service change:\nadd addURLNotificationSubscriptions Array..",
+                "de": "URL Anmeldung Dienständerung:\naddURLNotificationSubscriptions Array.",
+                "ru": "URL Уведомление о подписке Изменение службы:\nдобавитьURLNotificationПодписки Array.",
+                "pt": "Alteração do Serviço de Assinatura de Notificação de URL:\naddURLNotificationSubscriptions Array.",
+                "nl": "Vertaling:\nvoegt toegevoegdheden Array.",
+                "fr": "Modification du service de notification d'URL:\najouter addURLNotificationAbonnements Array.",
+                "it": "Modifica del servizio:\naggiungere addURLNotificationSubscriptions Array.",
+                "es": "Cambio de servicio de suscripción de la URL:\nañadir addURLNotificaciónSubscriptions Array.",
+                "pl": "URL Zmiana usług subskrypcyjnych\nadddURLNotificationSubscriptions Array (ang.).",
+                "zh-cn": "统一通知服务更改:\n增删."
+            },
             "2.3.0": {
                 "en": "URL Notification Subscription Service change:\nadd forceOverwritte to addURLNotificationSubscription\nfixes on addURLNotificationSubscription\nadd getURLNotificationSubscriptionList Method\nadd deleteAllURLNotificationSubscriptions\nadd deleteURLNotificationSubscriptions",
                 "de": "URL Anmeldung Dienständerung:\nzusatzkraft Überschrieben bei addURLNotificationSubscription\nkorrekturen auf addURLNotificationSubscription\nbenachrichtigung hinzufügen Beschreibung\nlöschen AlleURLNotificationSubscriptions\ndeleteURLNotificationSubscriptions hinzufügen",
