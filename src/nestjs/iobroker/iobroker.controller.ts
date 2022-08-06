@@ -12,6 +12,7 @@ import {
 import { SendToService, SendTo_DTO } from './services/send-to.service';
 import {
     AddURLNotification_DTO,
+    DeleteURLNotifications_DTO,
     URLNotificationSubscriptionService,
 } from './services/url-notification-subscription-service';
 
@@ -75,12 +76,12 @@ export class IobrokerController {
     /**
      * add a state to subscribe.
      * if this state will change, the given urls will be called with the new state object
-     * @param {stateID, urls, timeout}:AddURLNotification_DTO
-     * @returns
+     * @param {stateID, urls, timeout, forceOverwritte}:AddURLNotification_DTO
+     * @returns Result Promise with {result: _URL_SUBSCRIPTION {}}
      */
     @Post('addURLNotificationSubscription')
     public async addURLNotificationSubscription(
-        @Body() { stateID, urls, timeout }: AddURLNotification_DTO,
+        @Body() { stateID, urls, timeout = DEFAULT_TIMEOUT, forceOverwritte = false }: AddURLNotification_DTO,
     ): Promise<Result> {
         // check if parameters are ok
         if (!stateID) throw new BadRequestException('stateID musst be set');
@@ -97,6 +98,38 @@ export class IobrokerController {
             if (returnFalse) throw new BadRequestException(`the URL ${url} are not valid`);
         }
 
-        return this.urlNotificationSubscriptionService.addURLNotificationSubscription({ stateID, urls, timeout });
+        return this.urlNotificationSubscriptionService.addURLNotificationSubscription({
+            stateID,
+            urls,
+            timeout,
+            forceOverwritte,
+        });
+    }
+
+    /**
+     * get list with stateID's and the URL's
+     * @returns Result with {result:_URL_SUBSCRIPTION {}}
+     */
+    @Get('getURLNotificationSubscriptionList')
+    public getURLNotificationSubscriptionList(): Result {
+        return this.urlNotificationSubscriptionService.getURLNotificationSubscriptionList();
+    }
+
+    /**
+     * delete all the URLNotificationSubscriptions
+     * @returns Result Promise with {result: _URL_SUBSCRIPTION {}}
+     */
+    @Get('deleteAllURLNotificationSubscriptions')
+    public async deleteAllURLNotificationSubscriptions(): Promise<Result> {
+        return this.urlNotificationSubscriptionService.deleteAllURLNotificationSubscriptions();
+    }
+
+    /**
+     * deletes specifics URLNotificationSubscription from the given stateID Array
+     * @returns Result with {result:_URL_SUBSCRIPTION {}}
+     */
+    @Post('deleteURLNotificationSubscriptions')
+    public async deleteURLNotificationSubscriptions(@Body() props: DeleteURLNotifications_DTO): Promise<Result> {
+        return this.urlNotificationSubscriptionService.deleteURLNotificationSubscriptions(props);
     }
 }

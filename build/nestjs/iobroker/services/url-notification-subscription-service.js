@@ -28,6 +28,7 @@ var __decorateClass = (decorators, target, key, kind) => {
 var url_notification_subscription_service_exports = {};
 __export(url_notification_subscription_service_exports, {
   AddURLNotification_DTO: () => AddURLNotification_DTO,
+  DeleteURLNotifications_DTO: () => DeleteURLNotifications_DTO,
   URLNotificationSubscriptionService: () => URLNotificationSubscriptionService,
   UrlNotificationSubscriptionServiceListener: () => UrlNotificationSubscriptionServiceListener,
   listen: () => listen
@@ -53,6 +54,20 @@ __decorateClass([
   (0, import_class_validator.IsOptional)(),
   (0, import_class_validator.IsNumber)()
 ], AddURLNotification_DTO.prototype, "timeout", 2);
+__decorateClass([
+  (0, import_class_validator.IsOptional)(),
+  (0, import_class_validator.IsBoolean)()
+], AddURLNotification_DTO.prototype, "forceOverwritte", 2);
+class DeleteURLNotifications_DTO {
+}
+__decorateClass([
+  (0, import_class_validator.IsNotEmpty)(),
+  (0, import_class_validator.IsArray)()
+], DeleteURLNotifications_DTO.prototype, "stateIDs", 2);
+__decorateClass([
+  (0, import_class_validator.IsOptional)(),
+  (0, import_class_validator.IsNumber)()
+], DeleteURLNotifications_DTO.prototype, "timeout", 2);
 const listen = async (id, state, operation) => {
   var _a;
   if (operation === "deletion") {
@@ -76,7 +91,8 @@ let URLNotificationSubscriptionService = class {
     this.addURLNotificationSubscription = async ({
       stateID,
       urls,
-      timeout = import_main.DEFAULT_TIMEOUT
+      timeout = import_main.DEFAULT_TIMEOUT,
+      forceOverwritte = false
     }) => {
       var _a;
       (_a = import_main.AdapterStr.adapter) == null ? void 0 : _a.log.silly("URLNotificationSubscriptionService");
@@ -86,26 +102,62 @@ let URLNotificationSubscriptionService = class {
       const a = await adapter.getForeignStateAsync(stateID);
       if (!a)
         throw new import_common.BadRequestException(`the stateID: ${stateID} was not found on ioBroker`);
-      for (const url of urls) {
-        if (!_URL_SUBSCRIPTION.hasOwnProperty(stateID)) {
-          _URL_SUBSCRIPTION[stateID] = [];
-          const resultPromise = adapter.subscribeForeignStatesAsync(stateID);
-          const timeoutPromise = new Promise((resolve) => {
-            setTimeout(resolve, timeout, { errorTM: "" });
-          });
-          const result1 = await Promise.race([resultPromise, timeoutPromise]);
-          if (result1.hasOwnProperty("error")) {
-            throw new import_common.InternalServerErrorException(`Error while subscribe to ${stateID}`);
-          }
-          if (result1.hasOwnProperty("errorTM")) {
-            throw new import_common.GatewayTimeoutException(`TimeoutError on miio test after ${timeout}ms`);
-          }
+      if (!_URL_SUBSCRIPTION.hasOwnProperty(stateID)) {
+        _URL_SUBSCRIPTION[stateID] = [];
+        const resultPromise = adapter.subscribeForeignStatesAsync(stateID);
+        const timeoutPromise = new Promise((resolve) => {
+          setTimeout(resolve, timeout, { errorTM: "" });
+        });
+        const result1 = await Promise.race([resultPromise, timeoutPromise]);
+        if (result1.hasOwnProperty("error")) {
+          throw new import_common.InternalServerErrorException(`Error while subscribe to ${stateID}`);
         }
-        if (_URL_SUBSCRIPTION.hasOwnProperty(stateID) && !_URL_SUBSCRIPTION[stateID].includes(url)) {
+        if (result1.hasOwnProperty("errorTM")) {
+          throw new import_common.GatewayTimeoutException(`TimeoutError after ${timeout}ms`);
+        }
+      }
+      if (forceOverwritte) {
+        _URL_SUBSCRIPTION[stateID] = [];
+      }
+      for (const url of urls) {
+        if (!_URL_SUBSCRIPTION[stateID].includes(url)) {
           _URL_SUBSCRIPTION[stateID].push(url);
         }
       }
-      return { result: "all ok" };
+      return { result: _URL_SUBSCRIPTION };
+    };
+    this.getURLNotificationSubscriptionList = () => {
+      var _a;
+      (_a = import_main.AdapterStr.adapter) == null ? void 0 : _a.log.silly("getURLNotificationSubscriptionList");
+      return { result: _URL_SUBSCRIPTION };
+    };
+    this.deleteAllURLNotificationSubscriptions = async () => {
+      var _a;
+      (_a = import_main.AdapterStr.adapter) == null ? void 0 : _a.log.silly("deleteAllURLNotificationSubscriptions");
+      const adapter = import_main.AdapterStr.adapter;
+      if (!adapter)
+        throw new import_common.InternalServerErrorException("ioBroker adapter not set ??");
+      for (const id of Object.keys(_URL_SUBSCRIPTION)) {
+        await adapter.unsubscribeForeignStatesAsync(id);
+      }
+      for (const id of Object.keys(_URL_SUBSCRIPTION)) {
+        delete _URL_SUBSCRIPTION[id];
+      }
+      return { result: _URL_SUBSCRIPTION };
+    };
+    this.deleteURLNotificationSubscriptions = async ({ stateIDs }) => {
+      var _a;
+      (_a = import_main.AdapterStr.adapter) == null ? void 0 : _a.log.silly("deleteURLNotificationSubscriptions");
+      const adapter = import_main.AdapterStr.adapter;
+      if (!adapter)
+        throw new import_common.InternalServerErrorException("ioBroker adapter not set ??");
+      for (const id of stateIDs) {
+        await adapter.unsubscribeForeignStatesAsync(id);
+      }
+      for (const id of stateIDs) {
+        delete _URL_SUBSCRIPTION[id];
+      }
+      return { result: _URL_SUBSCRIPTION };
     };
   }
 };
@@ -115,6 +167,7 @@ URLNotificationSubscriptionService = __decorateClass([
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   AddURLNotification_DTO,
+  DeleteURLNotifications_DTO,
   URLNotificationSubscriptionService,
   UrlNotificationSubscriptionServiceListener,
   listen

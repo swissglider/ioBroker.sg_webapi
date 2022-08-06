@@ -69,7 +69,7 @@ let IobrokerController = class {
   async miioGetSimpleMappingGet() {
     return this.mIIOService.getSimpleMappingAll();
   }
-  async addURLNotificationSubscription({ stateID, urls, timeout }) {
+  async addURLNotificationSubscription({ stateID, urls, timeout = import_main.DEFAULT_TIMEOUT, forceOverwritte = false }) {
     if (!stateID)
       throw new import_common.BadRequestException("stateID musst be set");
     if (!(Array.isArray(urls) && urls.length > 0 && urls.every((url) => typeof url == "string")))
@@ -84,7 +84,21 @@ let IobrokerController = class {
       if (returnFalse)
         throw new import_common.BadRequestException(`the URL ${url} are not valid`);
     }
-    return this.urlNotificationSubscriptionService.addURLNotificationSubscription({ stateID, urls, timeout });
+    return this.urlNotificationSubscriptionService.addURLNotificationSubscription({
+      stateID,
+      urls,
+      timeout,
+      forceOverwritte
+    });
+  }
+  getURLNotificationSubscriptionList() {
+    return this.urlNotificationSubscriptionService.getURLNotificationSubscriptionList();
+  }
+  async deleteAllURLNotificationSubscriptions() {
+    return this.urlNotificationSubscriptionService.deleteAllURLNotificationSubscriptions();
+  }
+  async deleteURLNotificationSubscriptions(props) {
+    return this.urlNotificationSubscriptionService.deleteURLNotificationSubscriptions(props);
   }
 };
 __decorateClass([
@@ -117,6 +131,16 @@ __decorateClass([
   (0, import_common.Post)("addURLNotificationSubscription"),
   __decorateParam(0, (0, import_common.Body)())
 ], IobrokerController.prototype, "addURLNotificationSubscription", 1);
+__decorateClass([
+  (0, import_common.Get)("getURLNotificationSubscriptionList")
+], IobrokerController.prototype, "getURLNotificationSubscriptionList", 1);
+__decorateClass([
+  (0, import_common.Get)("deleteAllURLNotificationSubscriptions")
+], IobrokerController.prototype, "deleteAllURLNotificationSubscriptions", 1);
+__decorateClass([
+  (0, import_common.Post)("deleteURLNotificationSubscriptions"),
+  __decorateParam(0, (0, import_common.Body)())
+], IobrokerController.prototype, "deleteURLNotificationSubscriptions", 1);
 IobrokerController = __decorateClass([
   (0, import_common.Controller)("iobroker")
 ], IobrokerController);

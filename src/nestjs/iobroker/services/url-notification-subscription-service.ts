@@ -1,6 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { BadRequestException, GatewayTimeoutException, Injectable, InternalServerErrorException } from '@nestjs/common';
-import { IsArray, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import { AdapterStr, DEFAULT_TIMEOUT } from '../../main';
 import { Result } from '../interfaces/result.interface';
 
@@ -18,7 +18,21 @@ export class AddURLNotification_DTO {
 
     @IsOptional()
     @IsNumber()
-    timeout!: number;
+    timeout?: number;
+
+    @IsOptional()
+    @IsBoolean()
+    forceOverwritte?: boolean;
+}
+
+export class DeleteURLNotifications_DTO {
+    @IsNotEmpty()
+    @IsArray()
+    stateIDs!: string[];
+
+    @IsOptional()
+    @IsNumber()
+    timeout?: number;
 }
 
 export const listen = async (
@@ -46,10 +60,16 @@ export const UrlNotificationSubscriptionServiceListener = {
 
 @Injectable()
 export class URLNotificationSubscriptionService {
+    /**
+     * adds the stateID and the urls to existing ones or creates it
+     * @param AddURLNotification_DTO
+     * @returns Result Promise with {result: _URL_SUBSCRIPTION {}}
+     */
     public addURLNotificationSubscription = async ({
         stateID,
         urls,
         timeout = DEFAULT_TIMEOUT,
+        forceOverwritte = false,
     }: AddURLNotification_DTO): Promise<Result> => {
         AdapterStr.adapter?.log.silly('URLNotificationSubscriptionService');
 
@@ -60,25 +80,78 @@ export class URLNotificationSubscriptionService {
         const a = await adapter.getForeignStateAsync(stateID);
         if (!a) throw new BadRequestException(`the stateID: ${stateID} was not found on ioBroker`);
 
-        for (const url of urls) {
-            if (!_URL_SUBSCRIPTION.hasOwnProperty(stateID)) {
-                _URL_SUBSCRIPTION[stateID] = [];
-                const resultPromise = adapter.subscribeForeignStatesAsync(stateID);
-                const timeoutPromise = new Promise((resolve) => {
-                    setTimeout(resolve, timeout, { errorTM: '' });
-                });
-                const result1: any = await Promise.race([resultPromise, timeoutPromise]);
-                if (result1.hasOwnProperty('error')) {
-                    throw new InternalServerErrorException(`Error while subscribe to ${stateID}`);
-                }
-                if (result1.hasOwnProperty('errorTM')) {
-                    throw new GatewayTimeoutException(`TimeoutError on miio test after ${timeout}ms`);
-                }
+        // create _URL_SUBSCRIPTION for the stateID
+        if (!_URL_SUBSCRIPTION.hasOwnProperty(stateID)) {
+            _URL_SUBSCRIPTION[stateID] = [];
+
+            // add the subscription if not yet done
+            const resultPromise = adapter.subscribeForeignStatesAsync(stateID);
+            const timeoutPromise = new Promise((resolve) => {
+                setTimeout(resolve, timeout, { errorTM: '' });
+            });
+            const result1: any = await Promise.race([resultPromise, timeoutPromise]);
+            if (result1.hasOwnProperty('error')) {
+                throw new InternalServerErrorException(`Error while subscribe to ${stateID}`);
             }
-            if (_URL_SUBSCRIPTION.hasOwnProperty(stateID) && !_URL_SUBSCRIPTION[stateID].includes(url)) {
+            if (result1.hasOwnProperty('errorTM')) {
+                throw new GatewayTimeoutException(`TimeoutError after ${timeout}ms`);
+            }
+        }
+
+        if (forceOverwritte) {
+            _URL_SUBSCRIPTION[stateID] = [];
+        }
+
+        for (const url of urls) {
+            if (!_URL_SUBSCRIPTION[stateID].includes(url)) {
                 _URL_SUBSCRIPTION[stateID].push(url);
             }
         }
-        return { result: 'all ok' };
+        return { result: _URL_SUBSCRIPTION };
+    };
+
+    /**
+     * get list with stateID's and the URL's
+     * @returns Result with {result:_URL_SUBSCRIPTION {}}
+     */
+    public getURLNotificationSubscriptionList = (): Result => {
+        AdapterStr.adapter?.log.silly('getURLNotificationSubscriptionList');
+        return { result: _URL_SUBSCRIPTION };
+    };
+
+    /**
+     * delete all the URLNotificationSubscriptions
+     * @returns Result Promise with {result: _URL_SUBSCRIPTION {}}
+     */
+    public deleteAllURLNotificationSubscriptions = async (): Promise<Result> => {
+        AdapterStr.adapter?.log.silly('deleteAllURLNotificationSubscriptions');
+
+        const adapter = AdapterStr.adapter;
+        if (!adapter) throw new InternalServerErrorException('ioBroker adapter not set ??');
+
+        for (const id of Object.keys(_URL_SUBSCRIPTION)) {
+            await adapter.unsubscribeForeignStatesAsync(id);
+        }
+        for (const id of Object.keys(_URL_SUBSCRIPTION)) {
+            delete _URL_SUBSCRIPTION[id];
+        }
+
+        return { result: _URL_SUBSCRIPTION };
+    };
+
+    public deleteURLNotificationSubscriptions = async ({ stateIDs }: DeleteURLNotifications_DTO): Promise<Result> => {
+        AdapterStr.adapter?.log.silly('deleteURLNotificationSubscriptions');
+
+        const adapter = AdapterStr.adapter;
+        if (!adapter) throw new InternalServerErrorException('ioBroker adapter not set ??');
+
+        for (const id of stateIDs) {
+            await adapter.unsubscribeForeignStatesAsync(id);
+        }
+        for (const id of stateIDs) {
+            delete _URL_SUBSCRIPTION[id];
+        }
+
+        return { result: _URL_SUBSCRIPTION };
     };
 }
