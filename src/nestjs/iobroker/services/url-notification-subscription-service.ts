@@ -25,10 +25,14 @@ export class AddURLNotification_DTO {
     forceOverwritte?: boolean;
 }
 
-export class DeleteURLNotifications_DTO {
+export class DeleteURLNotification_DTO {
     @IsNotEmpty()
     @IsArray()
-    stateIDs!: string[];
+    stateID!: string;
+
+    @IsNotEmpty()
+    @IsArray()
+    urls!: string[];
 
     @IsOptional()
     @IsNumber()
@@ -139,17 +143,21 @@ export class URLNotificationSubscriptionService {
         return { result: _URL_SUBSCRIPTION };
     };
 
-    public deleteURLNotificationSubscriptions = async ({ stateIDs }: DeleteURLNotifications_DTO): Promise<Result> => {
+    public deleteURLNotificationSubscriptions = async (props: DeleteURLNotification_DTO[]): Promise<Result> => {
         AdapterStr.adapter?.log.silly('deleteURLNotificationSubscriptions');
 
         const adapter = AdapterStr.adapter;
         if (!adapter) throw new InternalServerErrorException('ioBroker adapter not set ??');
 
-        for (const id of stateIDs) {
-            await adapter.unsubscribeForeignStatesAsync(id);
-        }
-        for (const id of stateIDs) {
-            delete _URL_SUBSCRIPTION[id];
+        for (const mapping of props) {
+            if (_URL_SUBSCRIPTION.hasOwnProperty(mapping.stateID)) {
+                _URL_SUBSCRIPTION[mapping.stateID] = _URL_SUBSCRIPTION[mapping.stateID].filter(
+                    (e) => !mapping.urls.includes(e),
+                );
+                if (_URL_SUBSCRIPTION[mapping.stateID].length == 0) {
+                    delete _URL_SUBSCRIPTION[mapping.stateID];
+                }
+            }
         }
 
         return { result: _URL_SUBSCRIPTION };

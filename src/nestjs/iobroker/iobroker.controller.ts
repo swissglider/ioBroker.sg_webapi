@@ -12,7 +12,7 @@ import {
 import { SendToService, SendTo_DTO } from './services/send-to.service';
 import {
     AddURLNotification_DTO,
-    DeleteURLNotifications_DTO,
+    DeleteURLNotification_DTO,
     URLNotificationSubscriptionService,
 } from './services/url-notification-subscription-service';
 
@@ -129,7 +129,7 @@ export class IobrokerController {
      * @returns Result with {result:_URL_SUBSCRIPTION {}}
      */
     @Post('deleteURLNotificationSubscriptions')
-    public async deleteURLNotificationSubscriptions(@Body() props: DeleteURLNotifications_DTO): Promise<Result> {
+    public async deleteURLNotificationSubscriptions(@Body() props: DeleteURLNotification_DTO[]): Promise<Result> {
         return this.urlNotificationSubscriptionService.deleteURLNotificationSubscriptions(props);
     }
 
