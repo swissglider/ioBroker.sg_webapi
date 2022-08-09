@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "sg_webapi",
-        "version": "2.3.2",
+        "version": "2.3.3",
         "news": {
+            "2.3.3": {
+                "en": "debugging",
+                "de": "debugging",
+                "ru": "отладка",
+                "pt": "depuração",
+                "nl": "debuggen",
+                "fr": "debugging",
+                "it": "debug",
+                "es": "debugging",
+                "pl": "debugowanie",
+                "zh-cn": "走私"
+            },
             "2.3.2": {
                 "en": "URL Notification Subscription Service change:\ndeleteURLNotificationSubscriptions",
                 "de": "URL Anmeldung Dienständerung:\ndeleteURLNotificationSubscriptions",
