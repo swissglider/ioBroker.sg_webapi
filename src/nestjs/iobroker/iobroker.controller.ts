@@ -1,5 +1,5 @@
 import { BadRequestException, Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common';
-import { AdapterStr, DEFAULT_TIMEOUT } from '../main';
+import { DEFAULT_TIMEOUT } from '../main';
 import { ValidationPipe } from '../validation.pipe';
 import { Result } from './interfaces/result.interface';
 import { AllInstanceService, GetAllInstanceNames_DTO } from './services/all-instances.service';
@@ -130,7 +130,6 @@ export class IobrokerController {
      */
     @Post('deleteURLNotificationSubscriptions')
     public async deleteURLNotificationSubscriptions(@Body() props: DeleteURLNotification_DTO[]): Promise<Result> {
-        AdapterStr.adapter?.log.error('Hallo Guido');
         return this.urlNotificationSubscriptionService.deleteURLNotificationSubscriptions(props);
     }
 
