@@ -155,6 +155,7 @@ export class URLNotificationSubscriptionService {
                     (e) => !mapping.urls.includes(e),
                 );
                 if (_URL_SUBSCRIPTION[mapping.stateID].length == 0) {
+                    await adapter.unsubscribeForeignStatesAsync(mapping.stateID);
                     delete _URL_SUBSCRIPTION[mapping.stateID];
                 }
             }
