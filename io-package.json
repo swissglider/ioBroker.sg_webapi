@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "sg_webapi",
-        "version": "2.3.3",
+        "version": "2.3.4",
         "news": {
+            "2.3.4": {
+                "en": "debugging",
+                "de": "debugging",
+                "ru": "отладка",
+                "pt": "depuração",
+                "nl": "debuggen",
+                "fr": "debugging",
+                "it": "debug",
+                "es": "debugging",
+                "pl": "debugowanie",
+                "zh-cn": "走私"
+            },
             "2.3.3": {
                 "en": "debugging",
                 "de": "debugging",
