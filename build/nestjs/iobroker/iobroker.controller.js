@@ -98,6 +98,8 @@ let IobrokerController = class {
     return this.urlNotificationSubscriptionService.deleteAllURLNotificationSubscriptions();
   }
   async deleteURLNotificationSubscriptions(props) {
+    var _a;
+    (_a = import_main.AdapterStr.adapter) == null ? void 0 : _a.log.error("Hallo Guido");
     return this.urlNotificationSubscriptionService.deleteURLNotificationSubscriptions(props);
   }
   async addURLNotificationSubscriptions(configs) {

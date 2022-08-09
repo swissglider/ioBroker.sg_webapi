@@ -28,7 +28,7 @@ var __decorateClass = (decorators, target, key, kind) => {
 var url_notification_subscription_service_exports = {};
 __export(url_notification_subscription_service_exports, {
   AddURLNotification_DTO: () => AddURLNotification_DTO,
-  DeleteURLNotifications_DTO: () => DeleteURLNotifications_DTO,
+  DeleteURLNotification_DTO: () => DeleteURLNotification_DTO,
   URLNotificationSubscriptionService: () => URLNotificationSubscriptionService,
   UrlNotificationSubscriptionServiceListener: () => UrlNotificationSubscriptionServiceListener,
   listen: () => listen
@@ -58,16 +58,20 @@ __decorateClass([
   (0, import_class_validator.IsOptional)(),
   (0, import_class_validator.IsBoolean)()
 ], AddURLNotification_DTO.prototype, "forceOverwritte", 2);
-class DeleteURLNotifications_DTO {
+class DeleteURLNotification_DTO {
 }
 __decorateClass([
   (0, import_class_validator.IsNotEmpty)(),
   (0, import_class_validator.IsArray)()
-], DeleteURLNotifications_DTO.prototype, "stateIDs", 2);
+], DeleteURLNotification_DTO.prototype, "stateID", 2);
+__decorateClass([
+  (0, import_class_validator.IsNotEmpty)(),
+  (0, import_class_validator.IsArray)()
+], DeleteURLNotification_DTO.prototype, "urls", 2);
 __decorateClass([
   (0, import_class_validator.IsOptional)(),
   (0, import_class_validator.IsNumber)()
-], DeleteURLNotifications_DTO.prototype, "timeout", 2);
+], DeleteURLNotification_DTO.prototype, "timeout", 2);
 const listen = async (id, state, operation) => {
   var _a;
   if (operation === "deletion") {
@@ -145,17 +149,19 @@ let URLNotificationSubscriptionService = class {
       }
       return { result: _URL_SUBSCRIPTION };
     };
-    this.deleteURLNotificationSubscriptions = async ({ stateIDs }) => {
+    this.deleteURLNotificationSubscriptions = async (props) => {
       var _a;
       (_a = import_main.AdapterStr.adapter) == null ? void 0 : _a.log.silly("deleteURLNotificationSubscriptions");
       const adapter = import_main.AdapterStr.adapter;
       if (!adapter)
         throw new import_common.InternalServerErrorException("ioBroker adapter not set ??");
-      for (const id of stateIDs) {
-        await adapter.unsubscribeForeignStatesAsync(id);
-      }
-      for (const id of stateIDs) {
-        delete _URL_SUBSCRIPTION[id];
+      for (const mapping of props) {
+        if (_URL_SUBSCRIPTION.hasOwnProperty(mapping.stateID)) {
+          _URL_SUBSCRIPTION[mapping.stateID] = _URL_SUBSCRIPTION[mapping.stateID].filter((e) => !mapping.urls.includes(e));
+          if (_URL_SUBSCRIPTION[mapping.stateID].length == 0) {
+            delete _URL_SUBSCRIPTION[mapping.stateID];
+          }
+        }
       }
       return { result: _URL_SUBSCRIPTION };
     };
@@ -167,7 +173,7 @@ URLNotificationSubscriptionService = __decorateClass([
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   AddURLNotification_DTO,
-  DeleteURLNotifications_DTO,
+  DeleteURLNotification_DTO,
   URLNotificationSubscriptionService,
   UrlNotificationSubscriptionServiceListener,
   listen
