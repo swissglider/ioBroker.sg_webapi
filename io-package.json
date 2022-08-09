@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "sg_webapi",
-        "version": "2.3.1",
+        "version": "2.3.2",
         "news": {
+            "2.3.2": {
+                "en": "URL Notification Subscription Service change:\ndeleteURLNotificationSubscriptions",
+                "de": "URL Anmeldung Dienständerung:\ndeleteURLNotificationSubscriptions",
+                "ru": "URL Уведомление о подписке Изменение службы:\nremoveURLNotificationПодписки",
+                "pt": "Alteração do Serviço de Assinatura de Notificação de URL:\ndeleteURLNotificações Assinaturas",
+                "nl": "Vertaling:\nvertaling:",
+                "fr": "Modification du service de notification d'URL:\nabonnements",
+                "it": "Modifica del servizio:\ndeleteURLNotificationSubscriptions",
+                "es": "Cambio de servicio de suscripción de la URL:\ndeleteURLNotificationSubscriptions",
+                "pl": "URL Zmiana usług subskrypcyjnych\noficjalna strona internetowa",
+                "zh-cn": "统一通知服务更改:\n删除"
+            },
             "2.3.1": {
                 "en": "URL Notification Subscription Service change:\nadd addURLNotificationSubscriptions Array..",
                 "de": "URL Anmeldung Dienständerung:\naddURLNotificationSubscriptions Array.",
