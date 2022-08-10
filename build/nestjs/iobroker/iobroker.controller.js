@@ -35,20 +35,23 @@ var import_common = require("@nestjs/common");
 var import_main = require("../main");
 var import_validation = require("../validation.pipe");
 var import_all_instances = require("./services/all-instances.service");
+var import_control_adapter_service = require("./services/control-adapter-service");
 var import_miio_service = require("./services/miio-service");
 var import_search_object = require("./services/search-object.service");
 var import_url_notification_subscription_service = require("./services/url-notification-subscription-service");
 let IobrokerController = class {
-  constructor(allInstanceServise, searchObjectService, sendToService, mIIOService, urlNotificationSubscriptionService) {
+  constructor(allInstanceServise, searchObjectService, sendToService, mIIOService, urlNotificationSubscriptionService, controlAdapterService) {
     this.allInstanceServise = allInstanceServise;
     this.searchObjectService = searchObjectService;
     this.sendToService = sendToService;
     this.mIIOService = mIIOService;
     this.urlNotificationSubscriptionService = urlNotificationSubscriptionService;
+    this.controlAdapterService = controlAdapterService;
     this.allInstanceServise = new import_all_instances.AllInstanceService();
     this.searchObjectService = new import_search_object.SearchObjectService();
     this.mIIOService = new import_miio_service.MIIOService();
     this.urlNotificationSubscriptionService = new import_url_notification_subscription_service.URLNotificationSubscriptionService();
+    this.controlAdapterService = new import_control_adapter_service.ControlAdapterService();
   }
   async getAllInstanceNames({ timeout = import_main.DEFAULT_TIMEOUT }) {
     console.log("==== Start getAllInstanceNames 1 ====");
@@ -62,6 +65,9 @@ let IobrokerController = class {
   }
   async sendTo({ instance, command, message = {}, timeout = import_main.DEFAULT_TIMEOUT }) {
     return this.sendToService.sendTo({ instance, command, message, timeout });
+  }
+  async controlAdapter(props) {
+    return this.controlAdapterService.controlAdapter(props);
   }
   async miioGetSimpleMappingPost({ login, password, country, timeout = import_main.DEFAULT_TIMEOUT }) {
     return this.mIIOService.getSimpleMapping({ login, password, country, timeout });
@@ -98,8 +104,6 @@ let IobrokerController = class {
     return this.urlNotificationSubscriptionService.deleteAllURLNotificationSubscriptions();
   }
   async deleteURLNotificationSubscriptions(props) {
-    var _a;
-    (_a = import_main.AdapterStr.adapter) == null ? void 0 : _a.log.error("Hallo Guido");
     return this.urlNotificationSubscriptionService.deleteURLNotificationSubscriptions(props);
   }
   async addURLNotificationSubscriptions(configs) {
@@ -151,6 +155,10 @@ __decorateClass([
   (0, import_common.Post)("sendTo"),
   __decorateParam(0, (0, import_common.Body)())
 ], IobrokerController.prototype, "sendTo", 1);
+__decorateClass([
+  (0, import_common.Post)("controlAdapter"),
+  __decorateParam(0, (0, import_common.Body)())
+], IobrokerController.prototype, "controlAdapter", 1);
 __decorateClass([
   (0, import_common.Post)("miioGetSimpleMappingPost"),
   __decorateParam(0, (0, import_common.Body)())

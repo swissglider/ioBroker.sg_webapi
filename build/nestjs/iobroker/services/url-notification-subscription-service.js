@@ -159,6 +159,7 @@ let URLNotificationSubscriptionService = class {
         if (_URL_SUBSCRIPTION.hasOwnProperty(mapping.stateID)) {
           _URL_SUBSCRIPTION[mapping.stateID] = _URL_SUBSCRIPTION[mapping.stateID].filter((e) => !mapping.urls.includes(e));
           if (_URL_SUBSCRIPTION[mapping.stateID].length == 0) {
+            await adapter.unsubscribeForeignStatesAsync(mapping.stateID);
             delete _URL_SUBSCRIPTION[mapping.stateID];
           }
         }

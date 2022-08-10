@@ -3,6 +3,7 @@ import { DEFAULT_TIMEOUT } from '../main';
 import { ValidationPipe } from '../validation.pipe';
 import { Result } from './interfaces/result.interface';
 import { AllInstanceService, GetAllInstanceNames_DTO } from './services/all-instances.service';
+import { ControlAdapterService, ControlAdapter_DTO } from './services/control-adapter-service';
 import { MIIOService, MIIO_DTO } from './services/miio-service';
 import {
     SearchAllTypesWithNamePatternIncludesBatch_DTO,
@@ -24,11 +25,13 @@ export class IobrokerController {
         private sendToService: SendToService,
         private mIIOService: MIIOService,
         private urlNotificationSubscriptionService: URLNotificationSubscriptionService,
+        private controlAdapterService: ControlAdapterService,
     ) {
         this.allInstanceServise = new AllInstanceService();
         this.searchObjectService = new SearchObjectService();
         this.mIIOService = new MIIOService();
         this.urlNotificationSubscriptionService = new URLNotificationSubscriptionService();
+        this.controlAdapterService = new ControlAdapterService();
     }
 
     @Get('allInstanceNames')
@@ -59,6 +62,15 @@ export class IobrokerController {
         @Body() { instance, command, message = {}, timeout = DEFAULT_TIMEOUT }: SendTo_DTO,
     ): Promise<Result> {
         return this.sendToService.sendTo({ instance, command, message, timeout });
+    }
+
+    /**
+     * stop/start/restart an IoB adapter
+     * @param {Command, adapterName, instance}
+     */
+    @Post('controlAdapter')
+    public async controlAdapter(@Body() props: ControlAdapter_DTO): Promise<Result> {
+        return this.controlAdapterService.controlAdapter(props);
     }
 
     @Post('miioGetSimpleMappingPost')
