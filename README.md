@@ -119,7 +119,7 @@ For later updates, the above procedure is not necessary. Just do the following:
     ### **WORK IN PROGRESS**
 -->
 
-### **WORK IN PROGRESS**
+### 2.3.6 (2022-08-10)
 
 -   (Swissglider) URL Notification Subscription Service change:
     -   add ControlAdapterService
