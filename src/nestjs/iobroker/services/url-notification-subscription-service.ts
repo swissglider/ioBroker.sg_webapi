@@ -81,8 +81,8 @@ export class URLNotificationSubscriptionService {
         if (!adapter) throw new InternalServerErrorException('ioBroker adapter not set ??');
 
         // check if stateID is availavle
-        const a = await adapter.getForeignStateAsync(stateID);
-        if (!a) throw new BadRequestException(`the stateID: ${stateID} was not found on ioBroker`);
+        const ob = await adapter.getForeignObjectAsync(stateID);
+        if (!ob) throw new BadRequestException(`the stateID: ${stateID} was not found on ioBroker`);
 
         // create _URL_SUBSCRIPTION for the stateID
         if (!_URL_SUBSCRIPTION.hasOwnProperty(stateID)) {

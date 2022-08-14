@@ -103,8 +103,8 @@ let URLNotificationSubscriptionService = class {
       const adapter = import_main.AdapterStr.adapter;
       if (!adapter)
         throw new import_common.InternalServerErrorException("ioBroker adapter not set ??");
-      const a = await adapter.getForeignStateAsync(stateID);
-      if (!a)
+      const ob = await adapter.getForeignObjectAsync(stateID);
+      if (!ob)
         throw new import_common.BadRequestException(`the stateID: ${stateID} was not found on ioBroker`);
       if (!_URL_SUBSCRIPTION.hasOwnProperty(stateID)) {
         _URL_SUBSCRIPTION[stateID] = [];
