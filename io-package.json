@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "sg_webapi",
-        "version": "2.3.6",
+        "version": "2.3.7",
         "news": {
+            "2.3.7": {
+                "en": "URL Notification Subscription Service change:\nfix on addURLNotificationSubscription",
+                "de": "URL Anmeldung Dienständerung:\nfixieren auf addURLNotificationSubscription",
+                "ru": "URL Уведомление о подписке Изменение службы:\nисправить на addURLNotificationПодписка",
+                "pt": "Alteração do Serviço de Assinatura de Notificação de URL:\ncorrigir em addURLNotificationSubscription",
+                "nl": "Vertaling:\nvertaling:",
+                "fr": "Modification du service de notification d'URL:\nfix on addURLNotificationAbonnement",
+                "it": "Modifica del servizio:\ncorrezione su addURLNotificationSubscription",
+                "es": "Cambio de servicio de suscripción de la URL:\nfijado en addURLNotificaciónSubscripción",
+                "pl": "URL Zmiana usług subskrypcyjnych\nuRLNotificationSubscription (ang.)",
+                "zh-cn": "统一通知服务更改:\nf 增加欧元"
+            },
             "2.3.6": {
                 "en": "URL Notification Subscription Service change:\nadd ControlAdapterService",
                 "de": "URL Anmeldung Dienständerung:\ncontrolAdapterService hinzufügen",
